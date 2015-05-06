@@ -9,4 +9,3 @@ dependencies[] = taxonomy
 features[features_api][] = api:2
 features[field_base][] = field_s_related_content
 features[taxonomy][] = stanford_related_content
-project path = sites/all/modules/stanford
