@@ -1,0 +1,12 @@
+name = Stanford Related Content
+description = Defines relationships for displaying aggregated content 
+core = 7.x
+package = Stanford
+version = 7.x-1.0-alpha1
+project = stanford_related_content
+dependencies[] = features
+dependencies[] = taxonomy
+features[features_api][] = api:2
+features[field_base][] = field_s_related_content
+features[taxonomy][] = stanford_related_content
+project path = sites/all/modules/stanford
