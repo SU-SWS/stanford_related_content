@@ -1,0 +1,31 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Related Events feature.
+ */
+
+include_once 'stanford_related_events.features.inc';
+
+
+/*
+ * Implements hook_views_default_views_alter().
+ */
+
+function stanford_related_events_views_default_views_alter(&$views) {
+
+  /*
+   * Copy the block in the stanford_events_view and add a contextual filter
+   */
+  if (array_key_exists('stanford_events_views', $views)) {
+    $view = $views['stanford_events_views'];
+
+    $display_orig = $view->display['block'];
+    $display_new = $view->new_display('block', 'Filtered Upcoming Block', 'filtered_upcoming_block');
+
+    foreach($display_orig->handler->display->display_options as $key => $value) {
+      //$display_new->display->display_options [$key][$value];
+      $display_new->set_option($key, $value);
+    }
+  }
+}
+
