@@ -23,7 +23,6 @@ function stanford_related_events_views_default_views_alter(&$views) {
     $handler = $view->new_display('block', 'Filtered Upcoming Block', 'filtered_upcoming_block');
 
     foreach($display_orig->handler->display->display_options as $key => $value) {
-      //$display_new->display->display_options [$key][$value];
       $handler->set_option($key, $value);
     }
 
