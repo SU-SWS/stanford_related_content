@@ -6,26 +6,30 @@
 
 include_once 'stanford_related_events.features.inc';
 
+function stanford_related_events_form_alter(&$form, &$form_state, $form_id) {
+  dpm($form_id);
+}
+
 
 /*
  * Implements hook_views_default_views_alter().
  */
-
 function stanford_related_events_views_default_views_alter(&$views) {
 
   if (array_key_exists('stanford_events_views', $views)) {
-    stanford_related_events_alter_upcoming_block ($views['stanford_events_views']);
-    stanford_related_events_alter_upcoming_page ($views['stanford_events_views']);
+    stanford_related_events_alter_upcoming_block($views['stanford_events_views']);
+    stanford_related_events_alter_upcoming_page($views['stanford_events_views']);
   }
 }
 /*
  * Add contextual filter for related content to the page display
  */
-function stanford_related_events_alter_upcoming_page (&$view){
+function stanford_related_events_alter_upcoming_page(&$view){
 
   $handler = $view->display['page']->handler;
 
   /* Filter criterion: Content: Has taxonomy terms (with depth) */
+
   $handler->display->display_options['filters']['term_node_tid_depth']['id'] = 'term_node_tid_depth';
   $handler->display->display_options['filters']['term_node_tid_depth']['table'] = 'node';
   $handler->display->display_options['filters']['term_node_tid_depth']['field'] = 'term_node_tid_depth';
