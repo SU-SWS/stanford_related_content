@@ -116,11 +116,11 @@ function stanford_related_events_views_pre_build(&$view) {
         // Build the URL
         $parts = explode(":", $matches[0]);
         $url = str_replace("]","",$parts[1]);
+        $options = array('attributes' => array( 'class' => array('more-link')),
+          'query' => array(stanford_related_events_build_tax_args($view)));
+        $a = l("See more related events", $url, $options);
 
         // Replace text with the URL
-        $options = array('attributes' => array( 'class' => array('more-link')),
-                         'query' => array(stanford_related_events_build_tax_args($view)));
-        $a = l("See more related events", $url, $options);
         $subject = preg_replace($pattern, $a, $subject);
         $view->footer["area"]->options["content"] = $subject;
       }
