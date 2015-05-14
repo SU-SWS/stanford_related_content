@@ -116,10 +116,11 @@ function stanford_related_events_views_pre_build(&$view) {
         // Build the URL
         $parts = explode(":", $matches[0]);
         $url = str_replace("]","",$parts[1]);
-        $url = $url . stanford_related_events_build_tax_args($view);
 
         // Replace text with the URL
-        $a = l("See more related events", $url, array('attributes' => array('class' => array('more-link'))));
+        $options = array('attributes' => array( 'class' => array('more-link')),
+                         'query' => array(stanford_related_events_build_tax_args($view)));
+        $a = l("See more related events", $url, $options);
         $subject = preg_replace($pattern, $a, $subject);
         $view->footer["area"]->options["content"] = $subject;
       }
@@ -134,13 +135,13 @@ function stanford_related_events_build_tax_args($view) {
     $nid = arg(1);
   }
 
-  $result = '';
+  $result = array();
   $node = node_load($nid);
   if ($node) {
-    $result = '`?';
     foreach($node ->field_s_related_content['und'] as $key => $value) {
-      $result = $result . 'term_node_tid_depth[' . $key . ']=' . $value['tid'] . '&';
+      $result['term_node_tid_depth[' . $key . ']'] = $value['tid'];
     }
   }
   return $result;
 }
+
