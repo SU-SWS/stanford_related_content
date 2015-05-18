@@ -6,13 +6,11 @@
 
 include_once 'stanford_related_events.features.inc';
 
-function stanford_related_events_form_alter(&$form, &$form_state, $form_id) {
-  dpm($form_id);
-}
-
-
 /*
  * Implements hook_views_default_views_alter().
+ *
+ * @param array $views
+ *   Array of views for the site
  */
 function stanford_related_events_views_default_views_alter(&$views) {
 
@@ -23,6 +21,9 @@ function stanford_related_events_views_default_views_alter(&$views) {
 }
 /*
  * Add contextual filter for related content to the page display
+ *
+ * @param object $view
+ *   View to be altered
  */
 function stanford_related_events_alter_upcoming_page(&$view){
 
@@ -38,6 +39,7 @@ function stanford_related_events_alter_upcoming_page(&$view){
   $handler->display->display_options['filters']['term_node_tid_depth']['expose']['label'] = 'Filter by related content';
   $handler->display->display_options['filters']['term_node_tid_depth']['expose']['operator'] = 'term_node_tid_depth_op';
   $handler->display->display_options['filters']['term_node_tid_depth']['expose']['identifier'] = 'term_node_tid_depth';
+  $handler->display->display_options['filters']['term_node_tid_depth']['expose']['multiple'] = TRUE;
   $handler->display->display_options['filters']['term_node_tid_depth']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
@@ -58,6 +60,9 @@ function stanford_related_events_alter_upcoming_page(&$view){
 
 /*
  * Copy the block display in the stanford_events_view and add contextual filter for related content
+ *
+ * @param object $view
+ *   View to be altered
  */
 function stanford_related_events_alter_upcoming_block(&$view){
 
@@ -89,21 +94,27 @@ function stanford_related_events_alter_upcoming_block(&$view){
   $handler->display->display_options['arguments']['term_node_tid_depth']['depth'] = '0';
   $handler->display->display_options['arguments']['term_node_tid_depth']['break_phrase'] = TRUE;
 
+  $handler->display->display_options['use_more_always'] = TRUE;
+  $handler->display->display_options['defaults']['link_display'] = FALSE;
   $handler->display->display_options['defaults']['footer'] = FALSE;
-  /* Footer: Global: See more link */
+
+  // Footer: Global: See more link
   $handler->display->display_options['footer']['area']['id'] = 'area';
   $handler->display->display_options['footer']['area']['table'] = 'views';
   $handler->display->display_options['footer']['area']['field'] = 'area';
   $handler->display->display_options['footer']['area']['ui_name'] = 'Global: See more link';
-  $handler->display->display_options['footer']['area']['content'] = '<a  href=\'term_node_tid_depth[0]=!1\' class=more-link>See more related events</a>';
+  $handler->display->display_options['footer']['area']['content'] = '[hook_views_pre_build:events/upcoming-events]';
   $handler->display->display_options['footer']['area']['format'] = 'content_editor_text_format';
   $handler->display->display_options['footer']['area']['tokenize'] = TRUE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+
 }
 
 /*
  * Implements hook_views_pre_build().
+ *
  */
-function stanford_related_events_views_pre_build(&$view) {
+function stanford_related_events_views_pre_build(&$view){
   if ($view->name == "stanford_events_views"){
     if (($view->current_display == "filtered_upcoming_block") ||
       ($view->current_display == "block_5")){
@@ -113,14 +124,15 @@ function stanford_related_events_views_pre_build(&$view) {
       preg_match($pattern, $subject, $matches);
       if (!empty($matches)){
 
-        // Build the URL
+        // Build the URL.
         $parts = explode(":", $matches[0]);
-        $url = str_replace("]","",$parts[1]);
-        $options = array('attributes' => array( 'class' => array('more-link')),
-          'query' => array(stanford_related_events_build_tax_args($view)));
+        $url = str_replace("]", "", $parts[1]);
+        $options = array( 'attributes' => array( 'class' => array('more-link')),
+                          'query' => array( stanford_related_events_build_tax_args())
+          );
         $a = l("See more related events", $url, $options);
 
-        // Replace text with the URL
+        // Replace text with the URL.
         $subject = preg_replace($pattern, $a, $subject);
         $view->footer["area"]->options["content"] = $subject;
       }
@@ -128,18 +140,21 @@ function stanford_related_events_views_pre_build(&$view) {
   }
 }
 /*
- * Build the terms into arguments for the url
+ * Takes the related_content terms from the current node and builds them into arguments for link options.
+ *
+ * @returns array of arguments
  */
-function stanford_related_events_build_tax_args($view) {
+function stanford_related_events_build_tax_args(){
+  $result = array();
   if (arg(0) == 'node') {
     $nid = arg(1);
-  }
-
-  $result = array();
-  $node = node_load($nid);
-  if ($node) {
-    foreach($node ->field_s_related_content['und'] as $key => $value) {
-      $result['term_node_tid_depth[' . $key . ']'] = $value['tid'];
+    if (is_numeric($nid)){
+      $node = node_load($nid);
+      if ((!is_null($node)) && (isset($node->field_s_related_content['und']))) {
+        foreach($node->field_s_related_content['und'] as $key => $value){
+          $result['term_node_tid_depth[' . $key . ']'] = $value['tid'];
+        }
+      }
     }
   }
   return $result;
