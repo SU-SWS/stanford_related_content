@@ -10,6 +10,7 @@ dependencies[] = field_group
 dependencies[] = options
 dependencies[] = stanford_related_content
 dependencies[] = taxonomy
+dependencies[] = views_default_view_override
 features[ctools][] = field_group:field_group:1
 features[features_api][] = api:2
 features[field_group][] = group_s_related_content_style|node|stanford_event|default

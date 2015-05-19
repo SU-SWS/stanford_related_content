@@ -6,6 +6,7 @@
 
 include_once 'stanford_related_events.features.inc';
 
+
 /*
  * Implements hook_views_default_views_alter().
  *
@@ -15,9 +16,22 @@ include_once 'stanford_related_events.features.inc';
 function stanford_related_events_views_default_views_alter(&$views) {
 
   if (array_key_exists('stanford_events_views', $views)) {
-    stanford_related_events_alter_upcoming_block($views['stanford_events_views']);
-    stanford_related_events_alter_upcoming_page($views['stanford_events_views']);
+   stanford_related_events_stanford_events_views_override($views['stanford_events_views']);
   }
+}
+/*
+ * In case the view is overridden, make a copy of the existing view and alter it
+*/
+function stanford_related_events_stanford_events_views_override($orig_view){
+  $export = array();
+  $name = $orig_view->name . '_override';
+  $new_view = $orig_view->clone_view();
+  $new_view->name = $name;
+  $new_view->human_name = $orig_view->human_name . ' Override';
+  stanford_related_events_alter_upcoming_block($new_view);
+  stanford_related_events_alter_upcoming_page($new_view);
+
+  $new_view->save();
 }
 /*
  * Add contextual filter for related content to the page display
@@ -66,13 +80,15 @@ function stanford_related_events_alter_upcoming_page(&$view){
  */
 function stanford_related_events_alter_upcoming_block(&$view){
 
-    $display_orig = $view->display['block'];
-    $handler = $view->new_display('block', 'Filtered Upcoming Block', 'filtered_upcoming_block');
+  // Copy the block display
+  $display_orig = $view->display['block'];
+  $handler = $view->new_display('block', 'Filtered Upcoming Block', 'filtered_upcoming_block');
 
-    foreach($display_orig->handler->display->display_options as $key => $value) {
-      $handler->set_option($key, $value);
-    }
+  foreach($display_orig->handler->display->display_options as $key => $value) {
+    $handler->set_option($key, $value);
+  }
 
+  // Add the contextual filter
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Has taxonomy term ID (with depth) */
   $handler->display->display_options['arguments']['term_node_tid_depth']['id'] = 'term_node_tid_depth';
@@ -85,7 +101,7 @@ function stanford_related_events_alter_upcoming_block(&$view){
   $handler->display->display_options['arguments']['term_node_tid_depth']['default_argument_options']['node'] = TRUE;
   $handler->display->display_options['arguments']['term_node_tid_depth']['default_argument_options']['anyall'] = '+';
   $handler->display->display_options['arguments']['term_node_tid_depth']['default_argument_options']['vocabularies'] = array(
-      'stanford_related_content' => 'stanford_related_content',
+    'stanford_related_content' => 'stanford_related_content',
   );
   $handler->display->display_options['arguments']['term_node_tid_depth']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['term_node_tid_depth']['summary']['format'] = 'default_summary';
@@ -128,8 +144,8 @@ function stanford_related_events_views_pre_build(&$view){
         $parts = explode(":", $matches[0]);
         $url = str_replace("]", "", $parts[1]);
         $options = array( 'attributes' => array( 'class' => array('more-link')),
-                          'query' => array( stanford_related_events_build_tax_args())
-          );
+          'query' => array( stanford_related_events_build_tax_args())
+        );
         $a = l("See more related events", $url, $options);
 
         // Replace text with the URL.
@@ -158,5 +174,15 @@ function stanford_related_events_build_tax_args(){
     }
   }
   return $result;
+}
+
+/**
+ * Implements hook_views_default_view_override_views_to_override().
+ */
+function stanford_related_events_views_default_view_override_views_to_override() {
+  return array(
+    // Override the default view with the one provided by my_module.
+    'stanford_events_views' => 'stanford_events_views_override',
+  );
 }
 
