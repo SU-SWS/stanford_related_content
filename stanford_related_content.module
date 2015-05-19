@@ -3,3 +3,24 @@
  * @file
  * Drupal needs this blank file.
  */
+
+/*
+ * Takes the related_content terms from the current node and builds them into arguments for link options.
+ *
+ * @returns array of arguments
+ */
+function stanford_related_content_build_tax_args(){
+  $result = array();
+  if (arg(0) == 'node') {
+    $nid = arg(1);
+    if (is_numeric($nid)){
+      $node = node_load($nid);
+      if ((!is_null($node)) && (isset($node->field_s_related_content['und']))) {
+        foreach($node->field_s_related_content['und'] as $key => $value){
+          $result['term_node_tid_depth[' . $key . ']'] = $value['tid'];
+        }
+      }
+    }
+  }
+  return $result;
+}

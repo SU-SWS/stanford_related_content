@@ -16,20 +16,22 @@ include_once 'stanford_related_events.features.inc';
 function stanford_related_events_views_default_views_alter(&$views) {
 
   if (array_key_exists('stanford_events_views', $views)) {
-   stanford_related_events_stanford_events_views_override($views['stanford_events_views']);
+    stanford_related_events_alter_upcoming_block($views['stanford_events_views']);
+    stanford_related_events_alter_upcoming_page($views['stanford_events_views']);
+    stanford_related_events_stanford_events_views_override($views['stanford_events_views']);
   }
 }
 /*
- * In case the view is overridden, make a copy of the existing view and alter it
+ * Because the view might be overridden, make a copy of the existing view and alter it
+ *
+ *  @param object $view
+ *   View to be copied
 */
 function stanford_related_events_stanford_events_views_override($orig_view){
-  $export = array();
-  $name = $orig_view->name . '_override';
+
   $new_view = $orig_view->clone_view();
-  $new_view->name = $name;
+  $new_view->name = $orig_view->name . '_override';
   $new_view->human_name = $orig_view->human_name . ' Override';
-  stanford_related_events_alter_upcoming_block($new_view);
-  stanford_related_events_alter_upcoming_page($new_view);
 
   $new_view->save();
 }
@@ -110,7 +112,9 @@ function stanford_related_events_alter_upcoming_block(&$view){
   $handler->display->display_options['arguments']['term_node_tid_depth']['depth'] = '0';
   $handler->display->display_options['arguments']['term_node_tid_depth']['break_phrase'] = TRUE;
 
-  $handler->display->display_options['use_more_always'] = TRUE;
+
+  $handler->display->display_options['use_more'] = FALSE;
+  $handler->display->display_options['use_more_always'] = FALSE;//cjw
   $handler->display->display_options['defaults']['link_display'] = FALSE;
   $handler->display->display_options['defaults']['footer'] = FALSE;
 
@@ -129,9 +133,11 @@ function stanford_related_events_alter_upcoming_block(&$view){
 /*
  * Implements hook_views_pre_build().
  *
+ * @param object $view
+ *   View to be altered
  */
 function stanford_related_events_views_pre_build(&$view){
-  if ($view->name == "stanford_events_views"){
+  if (($view->name == "stanford_events_views") || ($view->name == "stanford_events_views_override")){
     if (($view->current_display == "filtered_upcoming_block") ||
       ($view->current_display == "block_5")){
       $pattern = "/\[hook_views_pre_build:.*\]/";
@@ -144,7 +150,7 @@ function stanford_related_events_views_pre_build(&$view){
         $parts = explode(":", $matches[0]);
         $url = str_replace("]", "", $parts[1]);
         $options = array( 'attributes' => array( 'class' => array('more-link')),
-          'query' => array( stanford_related_events_build_tax_args())
+          'query' => array( stanford_related_content_build_tax_args())
         );
         $a = l("See more related events", $url, $options);
 
@@ -154,26 +160,6 @@ function stanford_related_events_views_pre_build(&$view){
       }
     }
   }
-}
-/*
- * Takes the related_content terms from the current node and builds them into arguments for link options.
- *
- * @returns array of arguments
- */
-function stanford_related_events_build_tax_args(){
-  $result = array();
-  if (arg(0) == 'node') {
-    $nid = arg(1);
-    if (is_numeric($nid)){
-      $node = node_load($nid);
-      if ((!is_null($node)) && (isset($node->field_s_related_content['und']))) {
-        foreach($node->field_s_related_content['und'] as $key => $value){
-          $result['term_node_tid_depth[' . $key . ']'] = $value['tid'];
-        }
-      }
-    }
-  }
-  return $result;
 }
 
 /**
