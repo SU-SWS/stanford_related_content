@@ -5,6 +5,31 @@
  */
 
 /*
+ * This rewrites the pattern in the subject. It replaces it with
+ * 1) the link text
+ * 2) a link built with the url in the subject plus the taxonomy terms
+ *
+ */
+function stanford_related_content_add_more_link($subject, $link_text = "See more", $pattern = "/\[hook_views_pre_build:.*\]/" ){
+  $matches = array();
+  preg_match($pattern, $subject, $matches);
+  if (!empty($matches)){
+
+    // Build the URL.
+    $parts = explode(":", $matches[0]);
+    $url = str_replace("]", "", $parts[1]);
+    $options = array( 'attributes' => array( 'class' => array('more-link') ),
+      'query' => array( stanford_related_content_build_tax_args() )
+    );
+    $a = l(t($link_text), $url, $options);
+
+    // Replace text with the URL.
+    $subject = preg_replace($pattern, $a, $subject);
+  }
+  return $subject;
+}
+
+/*
  * Takes the related_content terms from the current node and builds them into arguments for link options.
  *
  * @returns array of arguments

@@ -207,27 +207,12 @@ function stanford_related_events_views_pre_build(&$view){
   if (($view->name == "stanford_events_views") || ($view->name == "stanford_events_views_override")){
     if (($view->current_display == "filtered_upcoming_block") ||
       ($view->current_display == "block_5")){
-      $pattern = "/\[hook_views_pre_build:.*\]/";
       $subject = $view->footer["area"]->options["content"];
-      $matches = array();
-      preg_match($pattern, $subject, $matches);
-      if (!empty($matches)){
-
-        // Build the URL.
-        $parts = explode(":", $matches[0]);
-        $url = str_replace("]", "", $parts[1]);
-        $options = array( 'attributes' => array( 'class' => array('more-link')),
-          'query' => array( stanford_related_content_build_tax_args())
-        );
-        $a = l("See more related events", $url, $options);
-
-        // Replace text with the URL.
-        $subject = preg_replace($pattern, $a, $subject);
-        $view->footer["area"]->options["content"] = $subject;
-      }
+      $view->footer["area"]->options["content"] = stanford_related_content_add_more_link($subject, "See more related events");
     }
   }
 }
+
 
 /*
  * Because the view might be overridden, make a copy of the view and use it instead
