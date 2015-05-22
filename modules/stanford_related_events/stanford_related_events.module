@@ -72,7 +72,6 @@ function stanford_related_events_alter_manage_events(&$view){
   $display->display_options['filters']['term_node_tid_depth']['hierarchy'] = 1;
   $display->display_options['filters']['term_node_tid_depth']['depth'] = '0';
 
-
   // Field: Content: Related Content
 
   // Check to see if the filters are overridden. if so, use the default instead.
@@ -82,7 +81,6 @@ function stanford_related_events_alter_manage_events(&$view){
     $display = $view->display['page']->handler->display;
   }
 
-
   if (!isset ($display->display_options['filters'])){
     if (is_null($view->display['default']->handler)){
       $display = $view->display['default'];
@@ -90,7 +88,6 @@ function stanford_related_events_alter_manage_events(&$view){
       $display = $view->display['default']->handler;
     }
   }
-
 
   $display->display_options['fields']['field_s_related_content']['id'] = 'field_s_related_content';
   $display->display_options['fields']['field_s_related_content']['table'] = 'field_data_field_s_related_content';
@@ -179,9 +176,15 @@ function stanford_related_events_alter_upcoming_block(&$view){
     }
   }
 
+
+  // Add the contextual filter
+  $options = array( 'arguments', FALSE );
+  $handler->set_option('defaults', $options);
+  // $handler->display->display_options['defaults']['arguments'] = FALSE;
+
   // Add the contextual filter
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Has taxonomy term ID (with depth) */
+  // Contextual filter: Content: Has taxonomy term ID (with depth)
   $handler->display->display_options['arguments']['term_node_tid_depth']['id'] = 'term_node_tid_depth';
   $handler->display->display_options['arguments']['term_node_tid_depth']['table'] = 'node';
   $handler->display->display_options['arguments']['term_node_tid_depth']['field'] = 'term_node_tid_depth';
@@ -192,7 +195,7 @@ function stanford_related_events_alter_upcoming_block(&$view){
   $handler->display->display_options['arguments']['term_node_tid_depth']['default_argument_options']['node'] = TRUE;
   $handler->display->display_options['arguments']['term_node_tid_depth']['default_argument_options']['anyall'] = '+';
   $handler->display->display_options['arguments']['term_node_tid_depth']['default_argument_options']['vocabularies'] = array(
-    'stanford_related_content' => 'stanford_related_content',
+   'stanford_related_content' => 'stanford_related_content',
   );
   $handler->display->display_options['arguments']['term_node_tid_depth']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['term_node_tid_depth']['summary']['format'] = 'default_summary';
@@ -203,7 +206,7 @@ function stanford_related_events_alter_upcoming_block(&$view){
 
 
   $handler->display->display_options['use_more'] = FALSE;
-  $handler->display->display_options['use_more_always'] = FALSE;//cjw
+  $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['defaults']['link_display'] = FALSE;
   $handler->display->display_options['defaults']['footer'] = FALSE;
 
