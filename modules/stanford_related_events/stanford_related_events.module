@@ -42,33 +42,7 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
       array('%name' => $name), WATCHDOG_ERROR);
     return;
   }
-/*
-  // Filter criterion: Content: Has taxonomy terms (with depth)
-  if (is_null($view->display['page']->handler)) {
-    $display = $view->display['page'];
-  }
-  elseif (isset ($view->display['page']->handler->display)) {
-      $display = $view->display['page']->handler->display;
-  }
-  else {
-    watchdog('stanford_events_manage', "Display \'page\' not available in view %name.",
-      array('%name' => $name), WATCHDOG_ERROR);
-  }
 
-  // Check to see if the filters are overridden. if so, alter the default instead.
-  if (!isset ($display->display_options['filters'])) {
-    if (is_null($view->display['default']->handler)) {
-      $display = $view->display['default'];
-    }
-    elseif (isset ($view->display['default']->handler)) {
-      $display = $view->display['default']->handler;
-    }
-    else {
-      watchdog('stanford_related_events', "Display \'default\' not available in view %name.",
-        array('%name' => $name), WATCHDOG_ERROR);
-    }
-  }
-  */
   $options = array();
   $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
   $options['term_node_tid_depth']['table'] = 'node';
@@ -98,40 +72,16 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
 
   // Field: Content: Related Content
 
-  // Check to see if the filters are overridden. if so, use the default instead.
-  if (is_null($view->display['page']->handler)) {
-    $display = $view->display['page'];
-  }
-  elseif (isset ($view->display['page']->handler->display)) {
-    $display = $view->display['page']->handler->display;
-  }
-  else {
-    watchdog('stanford_related_events', "Display \'page\' not available in view %name.",
-      array('%name' => $name), WATCHDOG_ERROR);
-  }
-
-  if (!isset ($display->display_options['filters'])) {
-    if (is_null($view->display['default']->handler)) {
-      $display = $view->display['default'];
-    }
-    elseif (isset ($view->display['default']->handler)) {
-      $display = $view->display['default']->handler;
-    }
-    else {
-      watchdog('stanford_related_events', "Display \'default\' not available in view %name.",
-        array('%name' => $name), WATCHDOG_ERROR);
-    }
-  }
-
-  $display->display_options['fields']['field_s_related_content']['id'] = 'field_s_related_content';
-  $display->display_options['fields']['field_s_related_content']['table'] = 'field_data_field_s_related_content';
-  $display->display_options['fields']['field_s_related_content']['field'] = 'field_s_related_content';
-  $display->display_options['fields']['field_s_related_content']['type'] = 'taxonomy_term_reference_plain';
-  $display->display_options['fields']['field_s_related_content']['delta_offset'] = '0';
-  $display->display_options['fields']['field_s_related_content']['multi_type'] = 'ul';
+  $options = array();
+  $options['field_s_related_content']['id'] = 'field_s_related_content';
+  $options['field_s_related_content']['table'] = 'field_data_field_s_related_content';
+  $options['field_s_related_content']['field'] = 'field_s_related_content';
+  $options['field_s_related_content']['type'] = 'taxonomy_term_reference_plain';
+  $options['field_s_related_content']['delta_offset'] = '0';
+  $options['field_s_related_content']['multi_type'] = 'ul';
 
   // VBO
-  $display->display_options['fields']['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action'] =
+  $options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action'] =
     array(
       'selected' => 1,
       'postpone_processing' => 0,
@@ -146,7 +96,7 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
         ),
       ),
     );
-
+  $handler->set_option('fields', $options);
 }
 
 /*
