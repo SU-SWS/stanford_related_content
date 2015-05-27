@@ -1,84 +1,85 @@
 <?php
 /**
- *
+ * @file
+ * Code for installing the Stanford Related Events feature.
  */
 
 /*
  * Implements hook_install().
  *
- * If it is in the database, get it, update it, save it.
+ * If the view is in the database it has been overridden on the site.
+ * Load the view, make a backup of it, update it, save the changed view back to the database,
+ * and save the backup in the variables table.
  *
  */
 
-function stanford_related_events_install(){
+function stanford_related_events_install() {
   $uninstall = array();
   $views = view::load_views();
   $message = NULL;
-  foreach($views as $view){
+  foreach ($views as $view) {
     $name = $view->name;
 
-    if (($name == 'stanford_events_manage') || ($name == 'stanford_events_views')){
+    if (($name == 'stanford_events_manage') || ($name == 'stanford_events_views')) {
 
       // Save a copy of the view to revert back to in uninstall
       $uninstall[$name] = $views[$name]->clone_view();
 
       switch ($name) {
         case 'stanford_events_views':
-          stanford_related_events_alter_upcoming_block($views['stanford_events_views']);
-          stanford_related_events_alter_upcoming_page($views['stanford_events_views']);
+          stanford_related_events_alter_upcoming_block($views, $name);
+          stanford_related_events_alter_upcoming_page($views, $name);
           break;
 
         case 'stanford_events_manage':
-          stanford_related_events_alter_manage_events($views[$name]);
+          stanford_related_events_alter_manage_events($views, $name);
           break;
       }
 
       // Check that the view still works after we altered it!
-      if ($views[$name]->validate()){
+      if ($views[$name]->validate()) {
         $views[$name]->save();
-      } else {
-        $message = "Could not validate view: " . $views[$name]->name . " (" . $views[$name]->get_title() . ").";
-        watchdog('stanford_related_events', $message);
-        throw new DrupalUpdateException($message);
+      }
+      else {
+        watchdog('stanford_related_events',
+          "Could not validate view: %name (%title).",
+          array('%name' => $views[$name]->name,
+                '%title' => $views[$name]->get_title()),
+          WATCHDOG_ERROR);
       }
     }
   }
   variable_set('stanford_related_events', $uninstall);
 }
 
-/*
-    if (!module_enable(array('stanford_bean_types_permissions'))) {
-      watchdog('stanford_bean_types', 'Could not enable stanford_bean_types_permissions module');
-      throw new DrupalUpdateException("Could not enable stanford_bean_types_permissions module. Please check that the module exists.");
-    }
-    else {
-      watchdog('stanford_bean_types', 'Enabled stanford_bean_types_permissions module.');
-    }
- */
 
 /*
  * Implements hook_uninstall().
  *
+ * If the view was overridden and in the database, revert back to that view.
+ *  - Get the view from the variables table.
+ *  - If the view is valid, save the view to the database
+ *
  */
-
-function stanford_related_events_uninstall(){
+function stanford_related_events_uninstall() {
   $uninstall = variable_get('stanford_related_events');
   $names = array('stanford_events_views', 'stanford_events_manage');
 
-  foreach ($names as $name){
+  foreach ($names as $name) {
     if (isset ($uninstall[$name])) {
       $view = $uninstall[$name];
 
       // Check that the view still works
       if ($view->validate()) {
         $view->save();
-      } else {
-        $message = "Could not validate view: " . $view->name . " (" . $view->get_title() . ").";
-        watchdog('stanford_related_events', $message);
-        throw new DrupalUpdateException($message);
+      }
+      else {
+        watchdog('stanford_related_events',
+          "Could not validate view: %name.",
+          array('%name' => $name),
+          WATCHDOG_ERROR);
       }
     }
   }
   variable_del('stanford_related_events');
-  watchdog('stanford_related_events', 'Reverted views');
 }
