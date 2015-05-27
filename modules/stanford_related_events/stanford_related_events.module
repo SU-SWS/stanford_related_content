@@ -34,7 +34,7 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
     return;
   }
 
-  if ($view->set_display('page')){
+  if ($view->set_display('page')) {
     $handler = $view->display_handler;
   }
   else {
@@ -116,7 +116,7 @@ function stanford_related_events_alter_upcoming_page(&$views, $name = 'stanford_
     return;
   }
 
-  if ($view->set_display('page')){
+  if ($view->set_display('page')) {
     $handler = $view->display_handler;
   }
   else {
