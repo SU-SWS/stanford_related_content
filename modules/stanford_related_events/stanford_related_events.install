@@ -45,7 +45,7 @@ function stanford_related_events_install() {
           "Could not validate view: %name (%title).",
           array('%name' => $views[$name]->name,
                 '%title' => $views[$name]->get_title()),
-          WATCHDOG_ERROR);
+          WATCHDOG_NOTICE);
       }
     }
   }
@@ -73,11 +73,12 @@ function stanford_related_events_uninstall() {
       if ($view->validate()) {
         $view->save();
       }
+
       else {
         watchdog('stanford_related_events',
           "Could not validate view: %name.",
           array('%name' => $name),
-          WATCHDOG_ERROR);
+          WATCHDOG_NOTICE);
       }
     }
   }

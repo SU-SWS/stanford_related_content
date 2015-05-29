@@ -29,8 +29,8 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
     $view = $views[$name];
   }
   else {
-    watchdog('stanford_events_manage', "View \'%name\' not available.",
-      array('%name' => $name), WATCHDOG_ERROR);
+    watchdog('stanford_related_events', "View '%name' not available.",
+      array('%name' => $name), WATCHDOG_NOTICE);
     return;
   }
 
@@ -38,8 +38,8 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
     $handler = $view->display_handler;
   }
   else {
-    watchdog('stanford_related_events', "Display \'page\' not available in view %name.",
-      array('%name' => $name), WATCHDOG_ERROR);
+    watchdog('stanford_related_events', "Display 'page' not available in view %name.",
+      array('%name' => $name), WATCHDOG_NOTICE);
     return;
   }
 
@@ -111,8 +111,8 @@ function stanford_related_events_alter_upcoming_page(&$views, $name = 'stanford_
     $view = $views[$name];
   }
   else {
-    watchdog('stanford_related_events', "View \'%name\' not available.",
-      array('%name' => $name), WATCHDOG_ERROR);
+    watchdog('stanford_related_events', "View '%name' not available.",
+      array('%name' => $name), WATCHDOG_NOTICE);
     return;
   }
 
@@ -120,8 +120,8 @@ function stanford_related_events_alter_upcoming_page(&$views, $name = 'stanford_
     $handler = $view->display_handler;
   }
   else {
-    watchdog('stanford_related_events', "Display \'page\' not available in view %name.",
-      array('%name' => $name), WATCHDOG_ERROR);
+    watchdog('stanford_related_events', "Display 'page' not available in view %name.",
+      array('%name' => $name), WATCHDOG_NOTICE);
     return;
   }
 
@@ -165,8 +165,8 @@ function stanford_related_events_alter_upcoming_block(&$views, $name = 'stanford
     $view = $views[$name];
   }
   else {
-    watchdog('stanford_related_events', "View \'%name\' not available.",
-      array('%name' => $name), WATCHDOG_ERROR);
+    watchdog('stanford_related_events', "View '%name' not available.",
+      array('%name' => $name), WATCHDOG_NOTICE);
     return;
   }
 
