@@ -43,7 +43,7 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
     return;
   }
 
-  $options = array();
+  $options = $handler->get_option('filters');
   $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
   $options['term_node_tid_depth']['table'] = 'node';
   $options['term_node_tid_depth']['field'] = 'term_node_tid_depth';
@@ -72,7 +72,7 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
 
   // Field: Content: Related Content
 
-  $options = array();
+  $options = $handler->get_option('fields');
   $options['field_s_related_content']['id'] = 'field_s_related_content';
   $options['field_s_related_content']['table'] = 'field_data_field_s_related_content';
   $options['field_s_related_content']['field'] = 'field_s_related_content';
@@ -80,23 +80,25 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
   $options['field_s_related_content']['delta_offset'] = '0';
   $options['field_s_related_content']['multi_type'] = 'ul';
 
-  // VBO
-  $options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action'] =
-    array(
-      'selected' => 1,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 1,
-      'label' => 'Modify',
-      'settings' => array(
-        'show_all_tokens' => 0,
-        'display_values' => array(
-          'stanford_event::field_s_event_type' => 'stanford_event::field_s_event_type',
-          'stanford_event::field_s_related_content' => 'stanford_event::field_s_related_content',
+    // VBO
+    $options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action'] =
+      array(
+        'selected' => 1,
+        'postpone_processing' => 0,
+        'skip_confirmation' => 0,
+        'override_label' => 1,
+        'label' => 'Modify',
+        'settings' => array(
+          'show_all_tokens' => 0,
+          'display_values' => array(
+            'stanford_event::field_s_event_type' => 'stanford_event::field_s_event_type',
+            'stanford_event::field_s_related_content' => 'stanford_event::field_s_related_content',
+          ),
         ),
-      ),
-    );
-  $handler->set_option('fields', $options);
+      );
+
+    $handler->set_option('fields', $options);
+
 }
 
 /*
@@ -125,7 +127,8 @@ function stanford_related_events_alter_upcoming_page(&$views, $name = 'stanford_
     return;
   }
 
-  $options = array();
+  //$options = array();
+  $options = $handler->get_option('filters');
   $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
   $options['term_node_tid_depth']['table'] = 'node';
   $options['term_node_tid_depth']['field'] = 'term_node_tid_depth';
@@ -181,9 +184,14 @@ function stanford_related_events_alter_upcoming_block(&$views, $name = 'stanford
   }
 
   // Add the contextual filter
-  $handler->set_option('defaults', array('arguments', FALSE ));
+  $options = $handler->get_option('defaults');
+  $options['arguments'] = FALSE;
+  $options['link_display'] = FALSE;
+  $options['footer'] = FALSE;
 
-  $options = array();
+  $handler->set_option('defaults', $options);
+
+  $options = $handler->get_option('arguments');
   $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
   $options['term_node_tid_depth']['table'] = 'node';
   $options['term_node_tid_depth']['field'] = 'term_node_tid_depth';
@@ -207,11 +215,9 @@ function stanford_related_events_alter_upcoming_block(&$views, $name = 'stanford
 
   $handler->set_option('use_more', FALSE);
   $handler->set_option('use_more_always', FALSE);
-  $handler->set_option('defaults', array('link_display', FALSE ));
-  $handler->set_option('defaults', array('footer', FALSE ));
 
   // Footer: Global: See more link
-  $options = array();
+  $options = $handler->get_option('footer');
   $options['area']['id'] = 'area';
   $options['area']['table'] = 'views';
   $options['area']['field'] = 'area';
