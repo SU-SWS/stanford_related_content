@@ -56,21 +56,16 @@ function stanford_related_events_uninstall() {
  */
 function stanford_related_events_uninstall_upcoming_block(&$views, $name = 'stanford_events_views') {
   if (array_key_exists($name, $views)) {
+
     $view = $views[$name];
+    unset($view->display['filtered_upcoming_block']);
 
-    if ($view->set_display('filtered_upcoming_block')) {
-      $handler = $view->display_handler;
-      // $handler->destroy();
-      $view->display['filtered_upcoming_block']->deleted = TRUE;
-      //unset($view->display['filtered_upcoming_block']);
-      $view->set_display('default');
-
-      // Check that the view still works after we altered it!
-      if (stanford_related_content_validate_view($views[$name], 'stanford_related_events')) {
-        $view->save();
-        watchdog($name, "Display 'filtered_upcoming_block' removed from view %name.",
-          array('%name' => $name), WATCHDOG_DEBUG);
-      }
+    // Check that the view still works after we altered it!
+    if (stanford_related_content_validate_view($view, 'stanford_related_events')) {
+      $view->save();
+      views_flush_caches();
+      watchdog($name, "Display 'filtered_upcoming_block' removed from view %name.",
+        array('%name' => $name), WATCHDOG_DEBUG);
     }
   }
 }
