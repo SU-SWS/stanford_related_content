@@ -16,7 +16,6 @@
 function stanford_related_events_install() {
   $uninstall = array();
   $views = view::load_views();
-  $message = NULL;
   foreach ($views as $view) {
     $name = $view->name;
 
@@ -62,6 +61,16 @@ function stanford_related_events_install() {
  *
  */
 function stanford_related_events_uninstall() {
+  $views = view::load_views();
+
+  stanford_related_events_uninstall_upcoming_block($views, 'stanford_events_views');
+  //stanford_related_events_uninstall_upcoming_page($views, 'stanford_events_views');
+  //stanford_related_events_uninstall_manage_events($views, 'stanford_events_manage');
+  variable_del('stanford_related_events');
+}
+
+
+/* Shea didn't like this.
   $uninstall = variable_get('stanford_related_events');
   $names = array('stanford_events_views', 'stanford_events_manage');
 
@@ -82,5 +91,36 @@ function stanford_related_events_uninstall() {
       }
     }
   }
-  variable_del('stanford_related_events');
+
+  */
+
+
+/*
+ * Remove the block display
+ *  @param object $view
+ *   View to be altered
+ *
+ *  @param string $name
+ *    Display to be altered
+ */
+
+
+function stanford_related_events_uninstall_upcoming_block(&$views, $name = 'stanford_events_views') {
+  if (array_key_exists($name, $views)) {
+    $view = $views[$name];
+
+    if ($view->set_display('filtered_upcoming_block')) {
+        $handler = $view->display_handler;
+       // $handler->destroy();
+        // This crashes... $view->display['filtered_upcoming_block']->destroy();
+        $view->set_display('default');
+
+      // Check that the view still works after we altered it!
+      if (stanford_related_content_validate_view($views[$name], 'stanford_related_events')) {
+        watchdog($name, "Display 'filtered_upcoming_block' removed from view %name.",
+          array('%name' => $name), WATCHDOG_DEBUG);
+      }
+    }
+  }
 }
+

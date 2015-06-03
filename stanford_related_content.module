@@ -49,3 +49,23 @@ function stanford_related_content_build_tax_args(){
   }
   return $result;
 }
+
+/*
+ * Validates a view
+ *
+ * @param view
+ *
+ */
+function stanford_related_content_validate_view($view, $name = 'stanford_related_content'){
+
+  if ($view->validate()) {
+    return TRUE;
+  }
+  else {
+    watchdog($name, "Could not validate view: %name (%title).",
+      array('%name' => $view->name,
+        '%title' => $view->get_title()),
+      WATCHDOG_NOTICE);
+    return FALSE;
+  }
+}
