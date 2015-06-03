@@ -8,56 +8,32 @@
  * Implements hook_install().
  *
  * If the view is in the database it has been overridden on the site.
- * Load the view, make a backup of it, update it, save the changed view back to the database,
- * and save the backup in the variables table.
+ * Load the view, update it, save the changed view back to the database.
  *
  */
 
 function stanford_related_events_install() {
-  $uninstall = array();
   $views = view::load_views();
-  foreach ($views as $view) {
-    $name = $view->name;
 
-    if (($name == 'stanford_events_manage') || ($name == 'stanford_events_views')) {
-
-      // Save a copy of the view to revert back to in uninstall
-      $uninstall[$name] = $views[$name]->clone_view();
-
-      switch ($name) {
-        case 'stanford_events_views':
-          stanford_related_events_alter_upcoming_block($views, $name);
-          stanford_related_events_alter_upcoming_page($views, $name);
-          break;
-
-        case 'stanford_events_manage':
-          stanford_related_events_alter_manage_events($views, $name);
-          break;
-      }
-
-      // Check that the view still works after we altered it!
-      if ($views[$name]->validate()) {
+  $name = 'stanford_events_views';
+  if (array_key_exists($name, $views)) {
+    if ((stanford_related_events_alter_upcoming_block($views, $name)) &&
+      (stanford_related_events_alter_upcoming_page($views, $name))) {
         $views[$name]->save();
-      }
-      else {
-        watchdog('stanford_related_events',
-          "Could not validate view: %name (%title).",
-          array('%name' => $views[$name]->name,
-                '%title' => $views[$name]->get_title()),
-          WATCHDOG_NOTICE);
-      }
     }
   }
-  variable_set('stanford_related_events', $uninstall);
+  $name = 'stanford_events_manage';
+   if (array_key_exists($name, $views)) {
+     if (stanford_related_events_alter_manage_events($views, 'stanford_events_manage')) {
+       $views[$name]->save();
+     }
+  }
 }
 
 
 /*
  * Implements hook_uninstall().
  *
- * If the view was overridden and in the database, revert back to that view.
- *  - Get the view from the variables table.
- *  - If the view is valid, save the view to the database
  *
  */
 function stanford_related_events_uninstall() {
@@ -66,11 +42,12 @@ function stanford_related_events_uninstall() {
   stanford_related_events_uninstall_upcoming_block($views, 'stanford_events_views');
   stanford_related_events_uninstall_upcoming_page($views, 'stanford_events_views');
   stanford_related_events_uninstall_manage_events($views, 'stanford_events_manage');
-  variable_del('stanford_related_events');
 }
 
 /*
  * Remove the block display
+ *
+ *
  *  @param object $views
  *   Array of views
  *

@@ -14,9 +14,10 @@ include_once 'stanford_related_events.features.inc';
  *   Array of views for the site
  */
 function stanford_related_events_views_default_views_alter(&$views) {
-    stanford_related_events_alter_upcoming_block($views, 'stanford_events_views');
-    stanford_related_events_alter_upcoming_page($views, 'stanford_events_views');
-    stanford_related_events_alter_manage_events($views, 'stanford_events_manage');
+  stanford_related_events_alter_upcoming_block($views, 'stanford_events_views');
+  stanford_related_events_alter_upcoming_page($views, 'stanford_events_views');
+  stanford_related_events_alter_manage_events($views, 'stanford_events_manage');
+
 }
 /*
  * Add exposed filter for related content to the page display
@@ -29,7 +30,7 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
     $view = $views[$name];
   }
   else {
-    return;
+    return FALSE;
   }
 
   if ($view->set_display('page')) {
@@ -38,7 +39,7 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
   else {
     watchdog('stanford_related_events', "Display 'page' not available in view %name.",
       array('%name' => $name), WATCHDOG_NOTICE);
-    return;
+    return FALSE;
   }
 
   // Add filter
@@ -84,6 +85,13 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
 
   $handler->set_option('fields', $options);
 
+  // Check that the view still works after we altered it!
+  if (stanford_related_content_validate_view($views[$name], 'stanford_related_events')) {
+    watchdog($name, "Filter 'field_s_related_content' added to  view %name.",
+      array('%name' => $name), WATCHDOG_DEBUG);
+    return TRUE;
+  }
+  return FALSE;
 }
 
 /*
@@ -98,7 +106,7 @@ function stanford_related_events_alter_upcoming_page(&$views, $name = 'stanford_
     $view = $views[$name];
   }
   else {
-    return;
+    return FALSE;
   }
 
   if ($view->set_display('page')) {
@@ -107,7 +115,7 @@ function stanford_related_events_alter_upcoming_page(&$views, $name = 'stanford_
   else {
     watchdog('stanford_related_events', "Display 'page' not available in view %name.",
       array('%name' => $name), WATCHDOG_NOTICE);
-    return;
+    return FALSE;
   }
 
   //$options = array();
@@ -138,6 +146,14 @@ function stanford_related_events_alter_upcoming_page(&$views, $name = 'stanford_
   $options['term_node_tid_depth']['depth'] = '0';
 
   $handler->set_option('filters', $options);
+
+  // Check that the view still works after we altered it!
+  if (stanford_related_content_validate_view($views[$name], 'stanford_related_events')) {
+    watchdog($name, "Filter 'stanford_related_content' added to view %name.",
+      array('%name' => $name), WATCHDOG_DEBUG);
+    return TRUE;
+  }
+  return FALSE;
 }
 
 /*
@@ -153,7 +169,7 @@ function stanford_related_events_alter_upcoming_block(&$views, $name = 'stanford
   else {
     watchdog('stanford_related_events', "View '%name' not available.",
       array('%name' => $name), WATCHDOG_NOTICE);
-    return;
+    return FALSE;
   }
 
   // Copy the block display
@@ -211,6 +227,13 @@ function stanford_related_events_alter_upcoming_block(&$views, $name = 'stanford
 
   $handler->set_option('footer', $options);
 
+  // Check that the view still works after we altered it!
+  if (stanford_related_content_validate_view($views[$name], 'stanford_related_events')) {
+    watchdog($name, "Block 'filtered_upcoming_block' added to view %name.",
+      array('%name' => $name), WATCHDOG_DEBUG);
+    return TRUE;
+  }
+  return FALSE;
 }
 
 /*
