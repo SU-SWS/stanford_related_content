@@ -83,7 +83,7 @@ function stanford_related_events_uninstall_upcoming_block(&$views, $name = 'stan
  *  @param string $name
  *    View to be altered
  */
-function stanford_related_events_uninstall_upcoming_page(&$views, $name = 'stanford_events_views'){
+function stanford_related_events_uninstall_upcoming_page(&$views, $name = 'stanford_events_views') {
   if (array_key_exists($name, $views)) {
     $view = $views[$name];
 
@@ -114,7 +114,7 @@ function stanford_related_events_uninstall_upcoming_page(&$views, $name = 'stanf
  *  @param string $name
  *    View to be altered
  */
-function stanford_related_events_uninstall_manage_events(&$views, $name = 'stanford_events_manage'){
+function stanford_related_events_uninstall_manage_events(&$views, $name = 'stanford_events_manage') {
   if (array_key_exists($name, $views)) {
     $view = $views[$name];
 
