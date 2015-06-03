@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Drupal needs this blank file.
+ *
  */
 
 /*
@@ -54,6 +54,9 @@ function stanford_related_content_build_tax_args(){
  * Validates a view
  *
  * @param view
+ *
+ * @param name
+ *   the name of the module
  *
  */
 function stanford_related_content_validate_view($view, $name = 'stanford_related_content'){

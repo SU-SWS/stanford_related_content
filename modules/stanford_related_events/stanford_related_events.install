@@ -64,59 +64,33 @@ function stanford_related_events_uninstall() {
   $views = view::load_views();
 
   stanford_related_events_uninstall_upcoming_block($views, 'stanford_events_views');
-  //stanford_related_events_uninstall_upcoming_page($views, 'stanford_events_views');
-  //stanford_related_events_uninstall_manage_events($views, 'stanford_events_manage');
+  stanford_related_events_uninstall_upcoming_page($views, 'stanford_events_views');
+  stanford_related_events_uninstall_manage_events($views, 'stanford_events_manage');
   variable_del('stanford_related_events');
 }
 
-
-/* Shea didn't like this.
-  $uninstall = variable_get('stanford_related_events');
-  $names = array('stanford_events_views', 'stanford_events_manage');
-
-  foreach ($names as $name) {
-    if (isset ($uninstall[$name])) {
-      $view = $uninstall[$name];
-
-      // Check that the view still works
-      if ($view->validate()) {
-        $view->save();
-      }
-
-      else {
-        watchdog('stanford_related_events',
-          "Could not validate view: %name.",
-          array('%name' => $name),
-          WATCHDOG_NOTICE);
-      }
-    }
-  }
-
-  */
-
-
 /*
  * Remove the block display
- *  @param object $view
- *   View to be altered
+ *  @param object $views
+ *   Array of views
  *
  *  @param string $name
- *    Display to be altered
+ *    View to be altered
  */
-
-
 function stanford_related_events_uninstall_upcoming_block(&$views, $name = 'stanford_events_views') {
   if (array_key_exists($name, $views)) {
     $view = $views[$name];
 
     if ($view->set_display('filtered_upcoming_block')) {
-        $handler = $view->display_handler;
-       // $handler->destroy();
-        // This crashes... $view->display['filtered_upcoming_block']->destroy();
-        $view->set_display('default');
+      $handler = $view->display_handler;
+      // $handler->destroy();
+      $view->display['filtered_upcoming_block']->deleted = TRUE;
+      //unset($view->display['filtered_upcoming_block']);
+      $view->set_display('default');
 
       // Check that the view still works after we altered it!
       if (stanford_related_content_validate_view($views[$name], 'stanford_related_events')) {
+        $view->save();
         watchdog($name, "Display 'filtered_upcoming_block' removed from view %name.",
           array('%name' => $name), WATCHDOG_DEBUG);
       }
@@ -124,3 +98,73 @@ function stanford_related_events_uninstall_upcoming_block(&$views, $name = 'stan
   }
 }
 
+/*
+ * Remove the items added to the page display
+ *  @param object $views
+ *   Array of views
+ *
+ *  @param string $name
+ *    View to be altered
+ */
+function stanford_related_events_uninstall_upcoming_page(&$views, $name = 'stanford_events_views'){
+  if (array_key_exists($name, $views)) {
+    $view = $views[$name];
+
+    if ($view->set_display('page')) {
+      $handler = $view->display_handler;
+
+      // Remove the exposed filter
+      $options = $handler->get_option('filters');
+      unset($options['term_node_tid_depth']);
+      $handler->set_option('filters', $options);
+
+      // Check that the view still works after we altered it!
+      if (stanford_related_content_validate_view($views[$name], 'stanford_related_events')) {
+        $view->save();
+        watchdog($name, "Field 'field_s_related_content' removed from view %name.",
+          array('%name' => $name), WATCHDOG_DEBUG);
+      }
+    }
+
+  }
+}
+
+/*
+ * Remove the items added to the manage events page display
+ *  @param object $views
+ *   Array of views
+ *
+ *  @param string $name
+ *    View to be altered
+ */
+function stanford_related_events_uninstall_manage_events(&$views, $name = 'stanford_events_manage'){
+  if (array_key_exists($name, $views)) {
+    $view = $views[$name];
+
+    if ($view->set_display('page')) {
+      $handler = $view->display_handler;
+
+      // Remove the exposed filter
+      $options = $handler->get_option('filters');
+      unset($options['term_node_tid_depth']);
+      $handler->set_option('filters', $options);
+
+      // Remove the related content field
+      $options = $handler->get_option('fields');
+      unset($options['term_node_tid_depth']);
+
+      // Remove the VBO
+      unset($options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
+      ['settings']['display_values']['stanford_event::field_s_related_content']);
+
+      $handler->set_option('fields', $options);
+
+      // Check that the view still works after we altered it!
+      if (stanford_related_content_validate_view($views[$name], 'stanford_related_events')) {
+        $view->save();
+        watchdog($name, "Field 'field_s_related_content' removed from view %name.",
+          array('%name' => $name), WATCHDOG_DEBUG);
+      }
+    }
+  }
+}
