@@ -4,14 +4,12 @@
  * Code for installing the Stanford Related Events feature.
  */
 
-/*
+/**
  * Implements hook_install().
  *
  * If the view is in the database it has been overridden on the site.
  * Load the view, update it, save the changed view back to the database.
- *
  */
-
 function stanford_related_events_install() {
   $views = view::load_views();
 
@@ -19,22 +17,20 @@ function stanford_related_events_install() {
   if (array_key_exists($name, $views)) {
     if ((stanford_related_events_alter_upcoming_block($views, $name)) &&
       (stanford_related_events_alter_upcoming_page($views, $name))) {
-        $views[$name]->save();
+      $views[$name]->save();
     }
   }
   $name = 'stanford_events_manage';
-   if (array_key_exists($name, $views)) {
-     if (stanford_related_events_alter_manage_events($views, 'stanford_events_manage')) {
-       $views[$name]->save();
-     }
+  if (array_key_exists($name, $views)) {
+    if (stanford_related_events_alter_manage_events($views, 'stanford_events_manage')) {
+      $views[$name]->save();
+    }
   }
 }
 
 
-/*
+/**
  * Implements hook_uninstall().
- *
- *
  */
 function stanford_related_events_uninstall() {
   $views = view::load_views();
@@ -44,15 +40,13 @@ function stanford_related_events_uninstall() {
   stanford_related_events_uninstall_manage_events($views, 'stanford_events_manage');
 }
 
-/*
- * Remove the block display
+/**
+ * Remove the block display.
  *
- *
- *  @param object $views
- *   Array of views
- *
- *  @param string $name
- *    View to be altered
+ * @param object $views
+ *   Array of views.
+ * @param string $name
+ *    View to be altered.
  */
 function stanford_related_events_uninstall_upcoming_block(&$views, $name = 'stanford_events_views') {
   if (array_key_exists($name, $views)) {
@@ -70,13 +64,13 @@ function stanford_related_events_uninstall_upcoming_block(&$views, $name = 'stan
   }
 }
 
-/*
- * Remove the items added to the page display
- *  @param object $views
- *   Array of views
+/**
+ * Remove the items added to the page display.
  *
- *  @param string $name
- *    View to be altered
+ * @param object $views
+ *   Array of views.
+ * @param string $name
+ *    View to be altered.
  */
 function stanford_related_events_uninstall_upcoming_page(&$views, $name = 'stanford_events_views') {
   if (array_key_exists($name, $views)) {
@@ -85,7 +79,7 @@ function stanford_related_events_uninstall_upcoming_page(&$views, $name = 'stanf
     if ($view->set_display('page')) {
       $handler = $view->display_handler;
 
-      // Remove the exposed filter
+      // Remove the exposed filter.
       $options = $handler->get_option('filters');
       unset($options['term_node_tid_depth']);
       $handler->set_option('filters', $options);
@@ -101,13 +95,13 @@ function stanford_related_events_uninstall_upcoming_page(&$views, $name = 'stanf
   }
 }
 
-/*
- * Remove the items added to the manage events page display
- *  @param object $views
- *   Array of views
+/**
+ * Remove the items added to the manage events page display.
  *
- *  @param string $name
- *    View to be altered
+ * @param object $views
+ *   Array of views.
+ * @param string $name
+ *    View to be altered.
  */
 function stanford_related_events_uninstall_manage_events(&$views, $name = 'stanford_events_manage') {
   if (array_key_exists($name, $views)) {
@@ -116,18 +110,18 @@ function stanford_related_events_uninstall_manage_events(&$views, $name = 'stanf
     if ($view->set_display('page')) {
       $handler = $view->display_handler;
 
-      // Remove the exposed filter
+      // Remove the exposed filter.
       $options = $handler->get_option('filters');
       unset($options['term_node_tid_depth']);
       $handler->set_option('filters', $options);
 
-      // Remove the related content field
+      // Remove the related content field.
       $options = $handler->get_option('fields');
       unset($options['term_node_tid_depth']);
 
-      // Remove the VBO
+      // Remove the VBO.
       unset($options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
-      ['settings']['display_values']['stanford_event::field_s_related_content']);
+        ['settings']['display_values']['stanford_event::field_s_related_content']);
 
       $handler->set_option('fields', $options);
 

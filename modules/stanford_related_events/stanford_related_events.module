@@ -7,11 +7,8 @@
 include_once 'stanford_related_events.features.inc';
 
 
-/*
+/**
  * Implements hook_views_default_views_alter().
- *
- * @param array $views
- *   Array of views for the site
  */
 function stanford_related_events_views_default_views_alter(&$views) {
   stanford_related_events_alter_upcoming_block($views, 'stanford_events_views');
@@ -19,11 +16,13 @@ function stanford_related_events_views_default_views_alter(&$views) {
   stanford_related_events_alter_manage_events($views, 'stanford_events_manage');
 
 }
-/*
- * Add exposed filter for related content to the page display
+/**
+ * Add exposed filter for related content to the page display.
  *
- * @param object $view
- *   View to be altered
+ * @param object $views
+ *   Array of views.
+ * @param string $name
+ *    View to be altered.
  */
 function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_events_manage') {
   if (array_key_exists($name, $views)) {
@@ -42,7 +41,7 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
     return FALSE;
   }
 
-  // Add filter
+  // Add filter.
   $options = $handler->get_option('filters');
   $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
   $options['term_node_tid_depth']['table'] = 'node';
@@ -70,7 +69,7 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
   $options['term_node_tid_depth']['depth'] = '0';
   $handler->set_option('filters', $options);
 
-  // Add Field: Content: Related Content
+  // Add Field: Content: Related Content.
   $options = $handler->get_option('fields');
   $options['field_s_related_content']['id'] = 'field_s_related_content';
   $options['field_s_related_content']['table'] = 'field_data_field_s_related_content';
@@ -79,9 +78,9 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
   $options['field_s_related_content']['delta_offset'] = '0';
   $options['field_s_related_content']['multi_type'] = 'ul';
 
-  // Add VBO option
+  // Add VBO option.
   $options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
-      ['settings']['display_values']['stanford_event::field_s_related_content'] = 'stanford_event::field_s_related_content';
+    ['settings']['display_values']['stanford_event::field_s_related_content'] = 'stanford_event::field_s_related_content';
 
   $handler->set_option('fields', $options);
 
@@ -94,11 +93,13 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
   return FALSE;
 }
 
-/*
- * Add contextual filter for related content to the page display
+/**
+ * Add contextual filter for related content to the page display.
  *
- * @param object $view
- *   View to be altered
+ * @param object $views
+ *   Array of views.
+ * @param string $name
+ *    View to be altered.
  */
 function stanford_related_events_alter_upcoming_page(&$views, $name = 'stanford_events_views') {
 
@@ -118,7 +119,6 @@ function stanford_related_events_alter_upcoming_page(&$views, $name = 'stanford_
     return FALSE;
   }
 
-  //$options = array();
   $options = $handler->get_option('filters');
   $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
   $options['term_node_tid_depth']['table'] = 'node';
@@ -156,11 +156,13 @@ function stanford_related_events_alter_upcoming_page(&$views, $name = 'stanford_
   return FALSE;
 }
 
-/*
- * Copy the block display in the stanford_events_view and add contextual filter for related content
+/**
+ * Copy the block display in the stanford_events_view and add contextual filter.
  *
- * @param object $view
- *   View to be altered
+ * @param object $views
+ *   Array of views.
+ * @param string $name
+ *    View to be altered.
  */
 function stanford_related_events_alter_upcoming_block(&$views, $name = 'stanford_events_views') {
   if (array_key_exists($name, $views)) {
@@ -172,7 +174,7 @@ function stanford_related_events_alter_upcoming_block(&$views, $name = 'stanford
     return FALSE;
   }
 
-  // Copy the block display
+  // Copy the block display.
   $display_orig = $view->display['block'];
   $handler = $view->new_display('block', 'Filtered Upcoming Block', 'filtered_upcoming_block');
 
@@ -182,7 +184,7 @@ function stanford_related_events_alter_upcoming_block(&$views, $name = 'stanford
     }
   }
 
-  // Add the contextual filter
+  // Add the contextual filter.
   $options = $handler->get_option('defaults');
   $options['arguments'] = FALSE;
   $options['link_display'] = FALSE;
@@ -215,7 +217,7 @@ function stanford_related_events_alter_upcoming_block(&$views, $name = 'stanford
   $handler->set_option('use_more', FALSE);
   $handler->set_option('use_more_always', FALSE);
 
-  // Footer: Global: See more link
+  // Footer: Global: See more link.
   $options = $handler->get_option('footer');
   $options['area']['id'] = 'area';
   $options['area']['table'] = 'views';
@@ -236,14 +238,11 @@ function stanford_related_events_alter_upcoming_block(&$views, $name = 'stanford
   return FALSE;
 }
 
-/*
+/**
  * Implements hook_views_pre_build().
  *
- * @param object $view
- *   View to be altered
- *
- * This rewrites the pattern in the footer of the view and replaces it with a link to the related view page.
- *
+ *   This rewrites the pattern in the footer of the view and replaces it
+ *   with a link to the related view page.
  */
 function stanford_related_events_views_pre_build(&$view) {
   if (($view->name == "stanford_events_views") || ($view->name == "stanford_events_views_override")) {
@@ -254,7 +253,3 @@ function stanford_related_events_views_pre_build(&$view) {
     }
   }
 }
-
-
-
-

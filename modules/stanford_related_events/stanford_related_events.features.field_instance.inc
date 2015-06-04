@@ -7,13 +7,14 @@
 /**
  * Implements hook_field_default_field_instances().
  */
-function stanford_related_events_field_default_field_instances() {
-  $field_instances = array();
+function stanford_related_events_field_default_field_instances() 
+{
+    $field_instances = array();
 
-  // Exported field_instance: 'node-stanford_event-field_s_related_content'
-  $field_instances['node-stanford_event-field_s_related_content'] = array(
+    // Exported field_instance: 'node-stanford_event-field_s_related_content'
+    $field_instances['node-stanford_event-field_s_related_content'] = array(
     'bundle' => 'stanford_event',
-    'default_value' => NULL,
+    'default_value' => null,
     'deleted' => 0,
     'description' => 'Defines relationships for displaying aggregated content.',
     'display' => array(
@@ -36,7 +37,7 @@ function stanford_related_events_field_default_field_instances() {
     'label' => 'Related Content',
     'required' => 0,
     'settings' => array(
-      'user_register_form' => FALSE,
+      'user_register_form' => false,
     ),
     'widget' => array(
       'active' => 1,
@@ -45,12 +46,12 @@ function stanford_related_events_field_default_field_instances() {
       'type' => 'options_buttons',
       'weight' => 14,
     ),
-  );
+    );
 
-  // Translatables
-  // Included for use with string extractors like potx.
-  t('Defines relationships for displaying aggregated content.');
-  t('Related Content');
+    // Translatables
+    // Included for use with string extractors like potx.
+    t('Defines relationships for displaying aggregated content.');
+    t('Related Content');
 
-  return $field_instances;
+    return $field_instances;
 }
