@@ -21,4 +21,3 @@ features_exclude[dependencies][stanford_faq] = stanford_faq
 features_exclude[field_base][field_s_faq_categories] = field_s_faq_categories
 features_exclude[field_instance][node-stanford_page-field_s_content_status] = node-stanford_page-field_s_content_status
 features_exclude[field_instance][node-stanford_page-field_s_faq_categories] = node-stanford_page-field_s_faq_categories
-project path = sites/all/modules/stanford/stanford_related_content/modules
