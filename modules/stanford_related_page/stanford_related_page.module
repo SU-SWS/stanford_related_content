@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Related Page feature.
+ */
+
+include_once 'stanford_related_page.features.inc';
