@@ -79,8 +79,29 @@ function stanford_related_events_alter_manage_events(&$views, $name = 'stanford_
   $options['field_s_related_content']['multi_type'] = 'ul';
 
   // Add VBO option.
-  $options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
-    ['settings']['display_values']['stanford_event::field_s_related_content'] = 'stanford_event::field_s_related_content';
+  if (isset($options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
+  ['settings'])) {
+    $options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
+      ['settings']['display_values']['stanford_event::field_s_related_content'] = 'stanford_event::field_s_related_content';
+  }
+  else {
+    $options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action'] =
+       array(
+        'selected' => 1,
+        'postpone_processing' => 0,
+        'skip_confirmation' => 0,
+        'override_label' => 1,
+        'label' => 'Modify',
+        'settings' => array(
+          'show_all_tokens' => 0,
+          'display_values' => array(
+            'stanford_event::field_s_event_type' => 'stanford_event::field_s_event_type',
+            'stanford_event::field_s_related_content' => 'stanford_event::field_s_related_content',
+          ),
+        ),
+      );
+  }
+
 
   $handler->set_option('fields', $options);
 
