@@ -201,13 +201,34 @@ function stanford_related_events_alter_upcoming_block(&$views, $name = 'stanford
   }
 
   // Copy the block display.
-  $display_orig = $view->display['block'];
-  $handler = $view->new_display('block', 'Filtered Upcoming Block', 'filtered_upcoming_block');
+  $display_id_orig = 'block';
 
+  if ($view->set_display($display_id_orig)) {
+    $display_orig = $view->display_handler;
+  }
+  else {
+    watchdog('stanford_related_events', "Display %display_id_orig not available in view %name.",
+      array('%display_id_orig' => $display_id_orig, '%name' => $name), WATCHDOG_NOTICE);
+    return FALSE;
+  }
+
+  // Get the display options.
   if (is_array($display_orig->handler->display->display_options)) {
-    foreach ($display_orig->handler->display->display_options as $key => $value) {
-      $handler->set_option($key, $value);
-    }
+    $options_orig = $display_orig->handler->display->display_options;
+  }
+  elseif (is_array($display_orig->display->display_options)) {
+    $options_orig = $display_orig->display->display_options;
+  }
+  else {
+    watchdog('stanford_related_events', "Display options for display %display_id_orig not available in view %name.",
+      array('%display_id_orig' => $display_id_orig, '%name' => $name), WATCHDOG_NOTICE);
+    return FALSE;
+  }
+
+  // Copy the display options.
+  $handler = $view->new_display('block', 'Filtered Upcoming Block', 'filtered_upcoming_block');
+  foreach ($options_orig as $key => $value) {
+    $handler->set_option($key, $value);
   }
 
   // Add the contextual filter.
