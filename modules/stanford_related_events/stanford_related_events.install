@@ -36,8 +36,11 @@ function stanford_related_events_uninstall() {
   $views = view::load_views();
 
   stanford_related_events_uninstall_upcoming_block($views);
-  stanford_related_events_uninstall_upcoming_page($views);
   stanford_related_events_uninstall_manage_events($views);
+
+  // Add related content to the exposed filter
+  stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'page', TRUE);
+  stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'upcoming_events_list_page', TRUE);
 }
 
 /**

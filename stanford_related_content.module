@@ -84,8 +84,10 @@ function stanford_related_content_validate_view($view, $name = 'stanford_related
  *   View to be altered.
  * @param string $display_name
  *   Display to be altered.
+ * @param boolean $multiple
+ *   Indicates if the filter should be multiple select
  */
-function stanford_related_content_add_exposed_filter($views, $view_name, $display_name){
+function stanford_related_content_add_exposed_filter($views, $view_name, $display_name = 'page', $multiple = FALSE){
   if (array_key_exists($view_name, $views)) {
     $view = $views[$view_name];
   }
@@ -113,7 +115,7 @@ function stanford_related_content_add_exposed_filter($views, $view_name, $displa
   $options['term_node_tid_depth']['expose']['label'] = 'Filter by related content';
   $options['term_node_tid_depth']['expose']['operator'] = 'term_node_tid_depth_op';
   $options['term_node_tid_depth']['expose']['identifier'] = 'term_node_tid_depth';
-  $options['term_node_tid_depth']['expose']['multiple'] = TRUE;
+  $options['term_node_tid_depth']['expose']['multiple'] = $multiple;
   $options['term_node_tid_depth']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,

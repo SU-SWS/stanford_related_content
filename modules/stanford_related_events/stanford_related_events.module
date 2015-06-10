@@ -15,8 +15,8 @@ function stanford_related_events_views_default_views_alter(&$views) {
   stanford_related_events_alter_manage_events($views);
 
   // Add related content to the exposed filter
-  stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'page');
-  stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'upcoming_events_list_page');
+  stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'page', TRUE);
+  stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'upcoming_events_list_page', TRUE);
 
 }
 /**
@@ -91,7 +91,9 @@ function stanford_related_events_alter_manage_events(&$views) {
 
   }
 */
-  // Add filter.
+  // Add the exposed filter.
+  stanford_related_content_add_exposed_filter($views, $name, 'page', FALSE);
+  /*
   $options = $handler->get_option('filters');
   $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
   $options['term_node_tid_depth']['table'] = 'node';
@@ -118,6 +120,7 @@ function stanford_related_events_alter_manage_events(&$views) {
   $options['term_node_tid_depth']['hierarchy'] = 1;
   $options['term_node_tid_depth']['depth'] = '0';
   $handler->set_option('filters', $options);
+  */
 
   // Add Field: Content: Related Content.
   $options = $handler->get_option('fields');
