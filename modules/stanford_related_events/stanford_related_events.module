@@ -294,21 +294,10 @@ function stanford_related_events_alter_upcoming_block(&$views) {
   $handler->set_option('footer', $options);
 
   // No results behavior: Global: Override so nothing displays.
-  /*
   $options = $handler->get_option('defaults');
   $options['empty'] = FALSE;
   $handler->set_option('defaults', $options);
 
-  $options = $handler->get_option('empty');
-  $options['area']['id'] = 'area';
-  $options['area']['table'] = 'views';
-  $options['area']['field'] = 'area';
-  $options['area']['empty'] = TRUE;
-  $options['area']['content'] = '<p>Currently, no future related events are scheduled.</p>' .
-    '<p><a class="more-link" href=' . $page_path . '>View All Events</a></p>';
-  $options['area']['format'] = 'content_editor_text_format';
-  $handler->set_option('empty', $options);
-  */
 
   // Check that the view still works after we altered it!
   if (stanford_related_content_validate_view($views[$name], 'stanford_related_events')) {
