@@ -4,6 +4,10 @@
  *
  */
 
+/**
+ * Utility Functions ----------------------------------------------------------------------------
+ **/
+
 /*
  * This rewrites the pattern in the subject. It replaces it with
  * 1) the link text
@@ -30,7 +34,7 @@ function stanford_related_content_add_more_link($subject, $link_text = "See more
 }
 
 /*
- * Takes the related_content terms from the current node and builds them into arguments for link options.
+ * This takes the related_content terms from the current node and builds them into arguments for link options.
  *
  * @returns array of arguments
  */
@@ -51,10 +55,9 @@ function stanford_related_content_build_tax_args(){
 }
 
 /*
- * Validates a view
+ * Validates a view and sets a notice if it doesn't validate.
  *
  * @param view
- *
  * @param name
  *   the name of the module
  *
@@ -69,6 +72,73 @@ function stanford_related_content_validate_view($view, $name = 'stanford_related
       array('%name' => $view->name,
         '%title' => $view->get_title()),
       WATCHDOG_NOTICE);
+    return FALSE;
+  }
+}
+/*
+ * Given a view and display, this adds the related content exposed filter to the display
+ *
+ * @param $views
+ *   Array of views
+ * @param string $view_name
+ *   View to be altered.
+ * @param string $display_name
+ *   Display to be altered.
+ */
+function stanford_related_content_add_exposed_filter($views, $view_name, $display_name){
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+  }
+  else {
+    watchdog('stanford_related_events', "View %view_name not available.",
+      array('%view_name' => $view_name), WATCHDOG_DEBUG);
+    return FALSE;
+  }
+
+  if ($view->set_display($display_name)) {
+    $handler = $view->display_handler;
+  }
+  else {
+    watchdog('stanford_related_events', "Display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    return FALSE;
+  }
+
+  $options = $handler->get_option('filters');
+  $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
+  $options['term_node_tid_depth']['table'] = 'node';
+  $options['term_node_tid_depth']['field'] = 'term_node_tid_depth';
+  $options['term_node_tid_depth']['exposed'] = TRUE;
+  $options['term_node_tid_depth']['expose']['operator_id'] = 'term_node_tid_depth_op';
+  $options['term_node_tid_depth']['expose']['label'] = 'Filter by related content';
+  $options['term_node_tid_depth']['expose']['operator'] = 'term_node_tid_depth_op';
+  $options['term_node_tid_depth']['expose']['identifier'] = 'term_node_tid_depth';
+  $options['term_node_tid_depth']['expose']['multiple'] = TRUE;
+  $options['term_node_tid_depth']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    6 => 0,
+    5 => 0,
+    4 => 0,
+    3 => 0,
+    9 => 0,
+    7 => 0,
+    8 => 0,
+  );
+  $options['term_node_tid_depth']['type'] = 'select';
+  $options['term_node_tid_depth']['vocabulary'] = 'stanford_related_content';
+  $options['term_node_tid_depth']['hierarchy'] = 1;
+  $options['term_node_tid_depth']['depth'] = '0';
+
+  $handler->set_option('filters', $options);
+
+  // Check that the view still works after we altered it!
+  if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_content')) {
+    watchdog('stanford_related_content', "Filter 'stanford_related_content' added to display %display_name on view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    return TRUE;
+  }
+  else {
     return FALSE;
   }
 }

@@ -12,8 +12,11 @@ include_once 'stanford_related_events.features.inc';
  */
 function stanford_related_events_views_default_views_alter(&$views) {
   stanford_related_events_alter_upcoming_block($views);
-  stanford_related_events_alter_upcoming_page($views);
   stanford_related_events_alter_manage_events($views);
+
+  // Add related content to the exposed filter
+  stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'page');
+  stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'upcoming_events_list_page');
 
 }
 /**
@@ -169,68 +172,6 @@ function stanford_related_events_alter_manage_events(&$views) {
   return FALSE;
 }
 
-/**
- * Add contextual filter for related content to the page display.
- *
- * @param object $views
- *   Array of views.
- * @param string $name
- *    View to be altered.
- */
-function stanford_related_events_alter_upcoming_page(&$views) {
-  $name = 'stanford_events_views';
-  if (array_key_exists($name, $views)) {
-    $view = $views[$name];
-  }
-  else {
-    return FALSE;
-  }
-
-  if ($view->set_display('page')) {
-    $handler = $view->display_handler;
-  }
-  else {
-    watchdog('stanford_related_events', "Display 'page' not available in view %name.",
-      array('%name' => $name), WATCHDOG_NOTICE);
-    return FALSE;
-  }
-
-  $options = $handler->get_option('filters');
-  $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
-  $options['term_node_tid_depth']['table'] = 'node';
-  $options['term_node_tid_depth']['field'] = 'term_node_tid_depth';
-  $options['term_node_tid_depth']['exposed'] = TRUE;
-  $options['term_node_tid_depth']['expose']['operator_id'] = 'term_node_tid_depth_op';
-  $options['term_node_tid_depth']['expose']['label'] = 'Filter by related content';
-  $options['term_node_tid_depth']['expose']['operator'] = 'term_node_tid_depth_op';
-  $options['term_node_tid_depth']['expose']['identifier'] = 'term_node_tid_depth';
-  $options['term_node_tid_depth']['expose']['multiple'] = TRUE;
-  $options['term_node_tid_depth']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    6 => 0,
-    5 => 0,
-    4 => 0,
-    3 => 0,
-    9 => 0,
-    7 => 0,
-    8 => 0,
-  );
-  $options['term_node_tid_depth']['type'] = 'select';
-  $options['term_node_tid_depth']['vocabulary'] = 'stanford_related_content';
-  $options['term_node_tid_depth']['hierarchy'] = 1;
-  $options['term_node_tid_depth']['depth'] = '0';
-
-  $handler->set_option('filters', $options);
-
-  // Check that the view still works after we altered it!
-  if (stanford_related_content_validate_view($views[$name], 'stanford_related_events')) {
-    watchdog($name, "Filter 'stanford_related_content' added to view %name.",
-      array('%name' => $name), WATCHDOG_DEBUG);
-    return TRUE;
-  }
-  return FALSE;
-}
 
 /**
  * Copy the block display in the stanford_events_view and add contextual filter.
