@@ -25,7 +25,7 @@ function stanford_related_events_views_default_views_alter(&$views) {
  *    View to be altered.
  */
 function stanford_related_events_alter_manage_events(&$views) {
-  $name = 'stanford_events_views';
+  $name = 'stanford_events_manage';
   if (array_key_exists($name, $views)) {
     $view = $views[$name];
   }
@@ -42,6 +42,52 @@ function stanford_related_events_alter_manage_events(&$views) {
     return FALSE;
   }
 
+  /**
+   * Add event series column to manage events view.
+   * @var [type]
+   */
+  /*
+  if ($view->name == 'stanford_events_manage' && $view->current_display == "page") {
+
+    // Get all of the page fields.
+    $items = $view->get_items("field", "page");
+
+    // Let us re-arrange the fields.
+    foreach ($items as $field_name => $value) {
+
+      // Got to remove the item to change the order.
+      $view->set_item("page", "field", $field_name, NULL);
+
+      // If the field is the event type field we want to insert the series after.
+      if ($field_name == "field_s_event_type") {
+        // Set the event field type first.
+        $view->set_item("page", "field", $field_name, $value);
+
+        // Then create the multiple value field using UL list.
+        $view->add_item($view->current_display, 'field', 'field_data_field_s_event_series', 'field_s_event_series', array(
+            'label' => t('Event series'),
+            'element_default_classes' => 1,
+            'element_label_colon' => 0,
+            'hide_empty' => 1,
+            'settings' => array(
+              'link' => 1,
+            ),
+            'group_type' => "group",
+            'group_rows' => 1,
+            'multi_type' => "ul",
+          ),
+          'field_s_event_series');
+
+        continue;
+      }
+
+      // All other items just get saved in the same order.
+      $view->set_item("page", "field", $field_name, $value);
+
+    }
+
+  }
+*/
   // Add filter.
   $options = $handler->get_option('filters');
   $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
@@ -248,13 +294,18 @@ function stanford_related_events_alter_upcoming_block(&$views) {
     $handler->set_option($key, $value);
   }
 
-  // Add the contextual filter.
+  // Override defaults.
   $options = $handler->get_option('defaults');
   $options['arguments'] = FALSE;
   $options['link_display'] = FALSE;
   $options['footer'] = FALSE;
 
+  // No results behavior: Override so nothing displays.
+  $options['empty'] = FALSE;
+
   $handler->set_option('defaults', $options);
+
+  // Add the contextual filter.
 
   $options = $handler->get_option('arguments');
   $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
@@ -293,10 +344,7 @@ function stanford_related_events_alter_upcoming_block(&$views) {
 
   $handler->set_option('footer', $options);
 
-  // No results behavior: Global: Override so nothing displays.
-  $options = $handler->get_option('defaults');
-  $options['empty'] = FALSE;
-  $handler->set_option('defaults', $options);
+
 
 
   // Check that the view still works after we altered it!
