@@ -179,16 +179,23 @@ function stanford_related_events_alter_upcoming_block(&$views) {
     return FALSE;
   }
 
+  $page_handler = null;
+
   // Get the page URL
-  if ($view->set_display('page')) {
-    //$display_name = 'page';
-    $page_handler = $view->display_handler;
+  if (isset($view->display['page'])) {
+    if ($view->set_display('page')) {
+      //$display_name = 'page';
+      $page_handler = $view->display_handler;
+    }
   }
-  elseif ($view->set_display('upcoming_events_list_page')){
-    //$display_name = 'upcoming_events_list_page';
-    $page_handler = $view->display_handler;
+  // Is it overridden?
+  elseif (isset($view->display['upcoming_events_list_page'])){
+    if ($view->set_display('upcoming_events_list_page')){
+      //$display_name = 'upcoming_events_list_page';
+      $page_handler = $view->display_handler;
+    }
   }
-  else {
+  if ($page_handler == null) {
     watchdog('stanford_related_events', "Display not available in view %view_name.",
       array('%view_name' => $view_name), WATCHDOG_DEBUG);
     return FALSE;
