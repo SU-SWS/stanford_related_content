@@ -1,0 +1,12 @@
+name = Stanford Related Events Upcoming Layout
+description =  Provides a default layout for related content on the upcoming events page.
+core = 7.x
+package = Stanford
+version = 7.x-1.0
+project = stanford_related_events_upcoming_layout
+dependencies[] = context
+dependencies[] = stanford_related_events
+dependencies[] = views
+features[context][] = events_upcoming_related
+features[ctools][] = context:context:3
+features[features_api][] = api:2
