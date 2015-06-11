@@ -179,19 +179,16 @@ function stanford_related_events_alter_upcoming_block(&$views) {
     return FALSE;
   }
 
-  $page_handler = null;
-
   // Get the page URL
+  $page_handler = null;
   if (isset($view->display['page'])) {
     if ($view->set_display('page')) {
-      //$display_name = 'page';
       $page_handler = $view->display_handler;
     }
   }
   // Is it overridden?
   elseif (isset($view->display['upcoming_events_list_page'])){
     if ($view->set_display('upcoming_events_list_page')){
-      //$display_name = 'upcoming_events_list_page';
       $page_handler = $view->display_handler;
     }
   }
@@ -228,7 +225,7 @@ function stanford_related_events_alter_upcoming_block(&$views) {
  *   with a link to the related view page.
  */
 function stanford_related_events_views_pre_build(&$view) {
-  if (($view->name == "stanford_events_views") || ($view->name == "stanford_events_views_override")) {
+  if ($view->name == "stanford_events_views"){
     if (($view->current_display == "filtered_upcoming_block") ||
       ($view->current_display == "block_5")) {
       $subject = $view->footer["area"]->options["content"];
