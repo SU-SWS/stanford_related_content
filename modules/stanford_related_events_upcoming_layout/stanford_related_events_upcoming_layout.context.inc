@@ -27,12 +27,6 @@ function stanford_related_events_upcoming_layout_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'views-fdbb6ea2c420f895188b18052fc9c443' => array(
-          'module' => 'views',
-          'delta' => 'fdbb6ea2c420f895188b18052fc9c443',
-          'region' => 'sidebar_first',
-          'weight' => '-7',
-        ),
         'views-ebe288ca12a13e55a34e0db9fbc9ef41' => array(
           'module' => 'views',
           'delta' => 'ebe288ca12a13e55a34e0db9fbc9ef41',
@@ -42,11 +36,6 @@ function stanford_related_events_upcoming_layout_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array(
-
-  );
-
-
   $context->condition_mode = 0;
 
   // Translatables
