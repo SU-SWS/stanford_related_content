@@ -19,7 +19,7 @@ function stanford_related_events_views_default_views_alter(&$views) {
 }
 /* *
  * Add related content to the page display or upcoming_events_page_list
- * 
+ *
  * @param object $views
  *   Array of views.
  */
@@ -57,6 +57,9 @@ function stanford_related_events_alter_manage_events(&$views) {
       array('%name' => $name), WATCHDOG_NOTICE);
     return FALSE;
   }
+
+  // Add the exposed filter.
+  stanford_related_content_add_exposed_filter($views, $name, 'page', FALSE);
 
   /**
    * Add event series column to manage events view.
@@ -104,36 +107,6 @@ function stanford_related_events_alter_manage_events(&$views) {
 
   }
 */
-  // Add the exposed filter.
-  stanford_related_content_add_exposed_filter($views, $name, 'page', FALSE);
-  /*
-  $options = $handler->get_option('filters');
-  $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
-  $options['term_node_tid_depth']['table'] = 'node';
-  $options['term_node_tid_depth']['field'] = 'term_node_tid_depth';
-  $options['term_node_tid_depth']['exposed'] = TRUE;
-  $options['term_node_tid_depth']['expose']['operator_id'] = 'term_node_tid_depth_op';
-  $options['term_node_tid_depth']['expose']['label'] = 'Filter by related content';
-  $options['term_node_tid_depth']['expose']['operator'] = 'term_node_tid_depth_op';
-  $options['term_node_tid_depth']['expose']['identifier'] = 'term_node_tid_depth';
-  $options['term_node_tid_depth']['expose']['multiple'] = FALSE;
-  $options['term_node_tid_depth']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    6 => 0,
-    5 => 0,
-    4 => 0,
-    3 => 0,
-    9 => 0,
-    7 => 0,
-    8 => 0,
-  );
-  $options['term_node_tid_depth']['type'] = 'select';
-  $options['term_node_tid_depth']['vocabulary'] = 'stanford_related_content';
-  $options['term_node_tid_depth']['hierarchy'] = 1;
-  $options['term_node_tid_depth']['depth'] = '0';
-  $handler->set_option('filters', $options);
-  */
 
   // Add Field: Content: Related Content.
   $options = $handler->get_option('fields');
@@ -196,116 +169,46 @@ function stanford_related_events_alter_manage_events(&$views) {
  *   Array of views.
  */
 function stanford_related_events_alter_upcoming_block(&$views) {
-  $name = 'stanford_events_views';
-  if (array_key_exists($name, $views)) {
-    $view = $views[$name];
+  $view_name = 'stanford_events_views';
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
   }
   else {
     watchdog('stanford_related_events', "View '%name' not available.",
-      array('%name' => $name), WATCHDOG_NOTICE);
+      array('%name' => $view_name), WATCHDOG_DEBUG);
     return FALSE;
   }
 
   // Get the page URL
   if ($view->set_display('page')) {
+    //$display_name = 'page';
+    $page_handler = $view->display_handler;
+  }
+  elseif ($view->set_display('upcoming_events_list_page')){
+    //$display_name = 'upcoming_events_list_page';
     $page_handler = $view->display_handler;
   }
   else {
-    watchdog('stanford_related_events', "Display 'page' not available in view %name.",
-      array('%name' => $name), WATCHDOG_NOTICE);
+    watchdog('stanford_related_events', "Display not available in view %view_name.",
+      array('%view_name' => $view_name), WATCHDOG_DEBUG);
     return FALSE;
   }
-
   $page_path = $page_handler->get_option('path');
 
   // Copy the block display.
-  $display_id_orig = 'block';
-
-  if ($view->set_display($display_id_orig)) {
-    $display_orig = $view->display_handler;
-  }
-  else {
-    watchdog('stanford_related_events', "Display %display_id_orig not available in view %name.",
-      array('%display_id_orig' => $display_id_orig, '%name' => $name), WATCHDOG_NOTICE);
+  $handler = stanford_related_content_copy_display($views, $view_name, 'block', 'Filtered Upcoming Block', 'filtered_upcoming_block');
+  if ($handler == FALSE) {
     return FALSE;
   }
 
-  // Get the display options.
-  if (isset($display_orig->handler->display->display_options)) {
-    $options_orig = $display_orig->handler->display->display_options;
-  }
-  elseif (isset($display_orig->display->display_options)) {
-    $options_orig = $display_orig->display->display_options;
-  }
-  else {
-    watchdog('stanford_related_events', "Display options for display %display_id_orig not available in view %name.",
-      array('%display_id_orig' => $display_id_orig, '%name' => $name), WATCHDOG_NOTICE);
-    return FALSE;
-  }
-
-  // Copy the display options.
-  $handler = $view->new_display('block', 'Filtered Upcoming Block', 'filtered_upcoming_block');
-  foreach ($options_orig as $key => $value) {
-    $handler->set_option($key, $value);
-  }
-
-  // Override defaults.
-  $options = $handler->get_option('defaults');
-  $options['arguments'] = FALSE;
-  $options['link_display'] = FALSE;
-  $options['footer'] = FALSE;
-
-  // No results behavior: Override so nothing displays.
-  $options['empty'] = FALSE;
-
-  $handler->set_option('defaults', $options);
-
-  // Add the contextual filter.
-
-  $options = $handler->get_option('arguments');
-  $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
-  $options['term_node_tid_depth']['table'] = 'node';
-  $options['term_node_tid_depth']['field'] = 'term_node_tid_depth';
-  $options['term_node_tid_depth']['default_action'] = 'default';
-  $options['term_node_tid_depth']['title_enable'] = TRUE;
-  $options['term_node_tid_depth']['title'] = 'Related Upcoming Events ';
-  $options['term_node_tid_depth']['default_argument_type'] = 'taxonomy_tid';
-  $options['term_node_tid_depth']['default_argument_options']['node'] = TRUE;
-  $options['term_node_tid_depth']['default_argument_options']['anyall'] = '+';
-  $options['term_node_tid_depth']['default_argument_options']['vocabularies'] = array(
-    'stanford_related_content' => 'stanford_related_content',
-  );
-  $options['term_node_tid_depth']['summary']['number_of_records'] = '0';
-  $options['term_node_tid_depth']['summary']['format'] = 'default_summary';
-  $options['term_node_tid_depth']['summary_options']['items_per_page'] = '25';
-  $options['term_node_tid_depth']['specify_validation'] = TRUE;
-  $options['term_node_tid_depth']['depth'] = '0';
-  $options['term_node_tid_depth']['break_phrase'] = TRUE;
-
-  $handler->set_option('arguments', $options);
-
-  $handler->set_option('use_more', FALSE);
-  $handler->set_option('use_more_always', FALSE);
-
-  // Footer: Global: See more link.
-  $options = $handler->get_option('footer');
-  $options['area']['id'] = 'area';
-  $options['area']['table'] = 'views';
-  $options['area']['field'] = 'area';
-  $options['area']['ui_name'] = 'Global: See more link';
-  $options['area']['content'] = '[hook_views_pre_build:' . $page_path . ']';
-  $options['area']['format'] = 'content_editor_text_format';
-  $options['area']['tokenize'] = TRUE;
-
-  $handler->set_option('footer', $options);
-
-
-
+  // Add contextual filter and more link
+  $handler = stanford_related_content_add_contextual_filter($handler);
+  $handler = stanford_related_content_add_footer_more_link($handler, $page_path);
 
   // Check that the view still works after we altered it!
-  if (stanford_related_content_validate_view($views[$name], 'stanford_related_events')) {
-    watchdog($name, "Block 'filtered_upcoming_block' added to view %name.",
-      array('%name' => $name), WATCHDOG_DEBUG);
+  if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_events')) {
+    watchdog('stanford_related_events', "Block 'filtered_upcoming_block' added to view %view_name.",
+      array('%view_name' => $view_name), WATCHDOG_DEBUG);
     return TRUE;
   }
   return FALSE;

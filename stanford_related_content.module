@@ -144,3 +144,116 @@ function stanford_related_content_add_exposed_filter($views, $view_name, $displa
     return FALSE;
   }
 }
+
+/*
+ * Return the handler to a copy of a display
+ *
+ */
+function stanford_related_content_copy_display ($views, $view_name, $display_name, $new_title = NULL, $new_id = NULL){
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+  }
+  else {
+    watchdog('stanford_related_content', "View '%view_name' not available.",
+      array('%view_name' => $view_name), WATCHDOG_NOTICE);
+    return FALSE;
+  }
+
+  if ($view->set_display($display_name)) {
+    $display_orig = $view->display_handler;
+  }
+  else {
+    watchdog('stanford_related_content', "Display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_NOTICE);
+    return FALSE;
+  }
+
+  // Get the type of display
+  $type = $display_orig->display->display_plugin;
+
+  // Get the display options.
+  if (isset($display_orig->handler->display->display_options)) {
+    $options_orig = $display_orig->handler->display->display_options;
+  }
+  elseif (isset($display_orig->display->display_options)) {
+    $options_orig = $display_orig->display->display_options;
+  }
+  else {
+    watchdog('stanford_related_events', "Display options for display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_NOTICE);
+    return FALSE;
+  }
+
+  // Copy the display options.
+  $handler = $view->new_display($type, $new_title, $new_id);
+  foreach ($options_orig as $key => $value) {
+    $handler->set_option($key, $value);
+  }
+  return $handler;
+}
+
+/*
+ * Adds the related content to the contextual filter in the given display
+ *
+ */
+function stanford_related_content_add_contextual_filter ($display_handler){
+
+  // Override defaults.
+  $options = $display_handler->get_option('defaults');
+  $options['arguments'] = FALSE;
+  $display_handler->set_option('defaults', $options);
+
+  // Add the contextual filter.
+  $options = $display_handler->get_option('arguments');
+  $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
+  $options['term_node_tid_depth']['table'] = 'node';
+  $options['term_node_tid_depth']['field'] = 'term_node_tid_depth';
+  $options['term_node_tid_depth']['default_action'] = 'default';
+  $options['term_node_tid_depth']['title_enable'] = TRUE;
+  $options['term_node_tid_depth']['title'] = 'Related Upcoming Events ';
+  $options['term_node_tid_depth']['default_argument_type'] = 'taxonomy_tid';
+  $options['term_node_tid_depth']['default_argument_options']['node'] = TRUE;
+  $options['term_node_tid_depth']['default_argument_options']['anyall'] = '+';
+  $options['term_node_tid_depth']['default_argument_options']['vocabularies'] = array(
+    'stanford_related_content' => 'stanford_related_content',
+  );
+  $options['term_node_tid_depth']['summary']['number_of_records'] = '0';
+  $options['term_node_tid_depth']['summary']['format'] = 'default_summary';
+  $options['term_node_tid_depth']['summary_options']['items_per_page'] = '25';
+  $options['term_node_tid_depth']['specify_validation'] = TRUE;
+  $options['term_node_tid_depth']['depth'] = '0';
+  $options['term_node_tid_depth']['break_phrase'] = TRUE;
+
+  $display_handler->set_option('arguments', $options);
+  return $display_handler;
+
+}
+/*
+ * Adds a more link to footer of the given display
+ *
+ */
+function stanford_related_content_add_footer_more_link($display_handler, $url){
+
+  // Override defaults.
+  $options = $display_handler->get_option('defaults');
+  $options['link_display'] = FALSE;
+  $options['footer'] = FALSE;
+  $options['empty'] = FALSE; // No results behavior: Override so nothing displays when no results.
+  $display_handler->set_option('defaults', $options);
+
+  $display_handler->set_option('use_more', FALSE);
+  $display_handler->set_option('use_more_always', FALSE);
+
+  // Footer: Global: See more link.
+  $options = $display_handler->get_option('footer');
+  $options['area']['id'] = 'area';
+  $options['area']['table'] = 'views';
+  $options['area']['field'] = 'area';
+  $options['area']['ui_name'] = 'Global: See more link';
+  $options['area']['content'] = '[hook_views_pre_build:' . $url . ']';
+  $options['area']['format'] = 'content_editor_text_format';
+  $options['area']['tokenize'] = TRUE;
+
+  $display_handler->set_option('footer', $options);
+  return $display_handler;
+}
