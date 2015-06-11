@@ -33,9 +33,20 @@ function stanford_related_events_upcoming_layout_context_default_contexts() {
           'region' => 'sidebar_first',
           'weight' => '-7',
         ),
+        'views-ebe288ca12a13e55a34e0db9fbc9ef41' => array(
+          'module' => 'views',
+          'delta' => 'ebe288ca12a13e55a34e0db9fbc9ef41',
+          'region' => 'sidebar_first',
+          'weight' => '-10',
+        ),
       ),
     ),
   );
+  $context->reactions = array(
+
+  );
+
+
   $context->condition_mode = 0;
 
   // Translatables
