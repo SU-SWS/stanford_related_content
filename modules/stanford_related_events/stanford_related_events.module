@@ -12,12 +12,25 @@ include_once 'stanford_related_events.features.inc';
  */
 function stanford_related_events_views_default_views_alter(&$views) {
   stanford_related_events_alter_upcoming_block($views);
+  stanford_related_events_alter_upcoming_page($views);
   stanford_related_events_alter_manage_events($views);
 
-  // Add related content to the exposed filter
-  stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'page', TRUE);
-  stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'upcoming_events_list_page', TRUE);
 
+}
+/* *
+ * Add related content to the page display or upcoming_events_page_list
+ * 
+ * @param object $views
+ *   Array of views.
+ */
+
+function stanford_related_events_alter_upcoming_page(&$views) {
+
+  // Add related content to the exposed filter
+  $page_result = stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'page', TRUE);
+  $upcoming_page_result = stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'upcoming_events_list_page', TRUE);
+
+  return ($page_result || $upcoming_page_result);
 }
 /**
  * Add exposed filter for related content to the page display.
@@ -181,8 +194,6 @@ function stanford_related_events_alter_manage_events(&$views) {
  *
  * @param object $views
  *   Array of views.
- * @param string $name
- *    View to be altered.
  */
 function stanford_related_events_alter_upcoming_block(&$views) {
   $name = 'stanford_events_views';
