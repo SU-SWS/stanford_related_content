@@ -41,25 +41,27 @@ function stanford_related_events_alter_upcoming_page(&$views) {
  *    View to be altered.
  */
 function stanford_related_events_alter_manage_events(&$views) {
-  $name = 'stanford_events_manage';
-  if (array_key_exists($name, $views)) {
-    $view = $views[$name];
+  $view_name = 'stanford_events_manage';
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
   }
   else {
     return FALSE;
   }
 
-  if ($view->set_display('page')) {
+  $display_name = 'page';
+  if ($view->set_display($display_name)) {
     $handler = $view->display_handler;
   }
   else {
-    watchdog('stanford_related_events', "Display 'page' not available in view %name.",
-      array('%name' => $name), WATCHDOG_NOTICE);
+    watchdog('stanford_related_events', "Display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_NOTICE);
     return FALSE;
   }
 
   // Add the exposed filter.
-  stanford_related_content_add_exposed_filter($views, $name, 'page', FALSE);
+  stanford_related_content_add_exposed_filter($views, $view_name, $display_name, FALSE);
+
 
   /**
    * Add event series column to manage events view.
@@ -109,13 +111,21 @@ function stanford_related_events_alter_manage_events(&$views) {
 */
 
   // Add Field: Content: Related Content.
-  $options = $handler->get_option('fields');
-  $options['field_s_related_content']['id'] = 'field_s_related_content';
-  $options['field_s_related_content']['table'] = 'field_data_field_s_related_content';
-  $options['field_s_related_content']['field'] = 'field_s_related_content';
+  $type = 'fields';
+  $table = 'field_data_field_s_related_content';
+  $field = 'field_s_related_content';
+  $after_field = 0;
+
+  $options = $handler->get_option($type);
+  $options['field_s_related_content']['id'] = $field;
+  $options['field_s_related_content']['table'] = $table;
+  $options['field_s_related_content']['field'] = $field;
   $options['field_s_related_content']['type'] = 'taxonomy_term_reference_plain';
   $options['field_s_related_content']['delta_offset'] = '0';
   $options['field_s_related_content']['multi_type'] = 'ul';
+
+  stanford_related_content_insert_item ($views, $view_name, $display_name, $type, $table, $field, $options,
+    $after_field);
 
   // Add VBO option.
   // VBO 7.x-3.2
@@ -153,9 +163,9 @@ function stanford_related_events_alter_manage_events(&$views) {
   $handler->set_option('fields', $options);
 
   // Check that the view still works after we altered it!
-  if (stanford_related_content_validate_view($views[$name], 'stanford_related_events')) {
-    watchdog($name, "Filter 'field_s_related_content' added to  view %name.",
-      array('%name' => $name), WATCHDOG_DEBUG);
+  if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_events')) {
+    watchdog('stanford_related_events', "Filter 'field_s_related_content' added to  view %view_name.",
+      array('%view_name' => $view_name), WATCHDOG_DEBUG);
     return TRUE;
   }
   return FALSE;

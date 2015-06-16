@@ -257,3 +257,89 @@ function stanford_related_content_add_footer_more_link($display_handler, $url){
   $display_handler->set_option('footer', $options);
   return $display_handler;
 }
+
+/*
+ * Adds the field after the given field.
+ *
+ * @param $views
+ *   Array of views
+ * @param string $view_name
+ *   View to be altered.
+ * @param string $display_name
+ *   Display to be altered
+ * @param string $type
+ *   Type of item to be altered
+ * @param string $table
+ *   Table name of the item to be inserted
+ *  @param string $field
+ *   Name of the item to be inserted
+ *  @param array $options
+ *   options to be included when inserting the item
+ *  @param string $after_field
+ *    Name of field to insert after
+ *
+ */
+function stanford_related_content_insert_item ($views, $view_name, $display_name, $type, $table, $field, $options = array(),
+                                                $after_field = NULL){
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+  }
+  else {
+    watchdog('stanford_related_content', "View '%view_name' not available.",
+      array('%view_name' => $view_name), WATCHDOG_NOTICE);
+    return FALSE;
+  }
+
+  if (!$view->set_display($display_name)) {
+    watchdog('stanford_related_content', "Display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_NOTICE);
+    return FALSE;
+  }
+
+/**
+ * Add event series column to manage events view.
+ * @var [type]
+
+
+if ($view->name == 'stanford_events_manage' && $view->current_display == "page") {
+
+  // Get all of the page fields.
+  $items = $view->get_items("field", "page");
+*/
+
+ // $view->add_item($display_name, $type, $table, $field, $options);
+  /*
+  if ($after_field == 0){
+    // Add it first
+    $view->add_item($display_name, $type, $table, $field, $options);
+  }
+  elseif ($after_field == NULL) {
+    // Add it last
+    $view->add_item($view->current_display, $type, $table, $field, $options);
+  }
+  else {
+    // Get all of the page fields.
+    $items = $view->get_items($type, $display_name);
+    // Let us re-arrange the fields.
+    foreach ($items as $field_name => $value) {
+
+      // Got to remove the item to change the order.
+      $view->set_item($display_name, $type, $field_name, NULL);
+
+      // If the field is the event type field we want to insert the series after.
+      if ($field_name == $after_field) {
+        // Set the event field type first.
+        $view->set_item($display_name, $type, $field_name, $value);
+
+        // Then add the new item
+        $view->add_item($display_name, $type, $table, $field, $options);
+
+        continue;
+      }
+
+      // All other items just get saved in the same order.
+      $view->set_item($display_name, $type, $field_name, $value);
+    }
+  }
+  */
+}
