@@ -78,8 +78,8 @@ function stanford_related_content_validate_view($view, $name = 'stanford_related
 /*
  * Given a view and display, this adds the related content exposed filter to the display
  *
- * @param $views
- *   Array of views
+ * @param $view
+ *   View to be altered
  * @param string $view_name
  *   View to be altered.
  * @param string $display_name
@@ -133,6 +133,85 @@ function stanford_related_content_add_exposed_filter($views, $view_name, $displa
   $options['term_node_tid_depth']['depth'] = '0';
 
   $handler->set_option('filters', $options);
+
+  // Check that the view still works after we altered it!
+  if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_content')) {
+    watchdog('stanford_related_content', "Filter 'stanford_related_content' added to display %display_name on view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/*
+ * Given a view and display, this adds the related content VBO to the display
+ *
+ * @param $view
+ *   View to be altered
+ * @param string $view_name
+ *   View to be altered.
+ * @param string $display_name
+ *   Display to be altered.
+ * @param boolean $multiple
+ *   Indicates if the filter should be multiple select
+ */
+function stanford_related_content_add_vbo($views, $view_name, $display_name = 'page'){
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+  }
+  else {
+    watchdog('stanford_related_events', "View %view_name not available.",
+      array('%view_name' => $view_name), WATCHDOG_DEBUG);
+    return FALSE;
+  }
+
+  if ($view->set_display($display_name)) {
+    $handler = $view->display_handler;
+  }
+  else {
+    watchdog('stanford_related_events', "Display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    return FALSE;
+  }
+
+  $options = $handler->get_option('fields');
+
+  // Add VBO option.
+  // VBO 7.x-3.2
+  if (isset($options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
+  ['settings'])) {
+    $options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
+    ['settings']['display_values']['stanford_event::field_s_related_content'] = 'stanford_event::field_s_related_content';
+  }
+
+  // VBO 7.x-3.0-rc1
+  elseif (is_array($options['views_bulk_operations']['vbo']['operations']['action::views_bulk_operations_modify_action']
+  ['settings']['display_values'])){
+    $options['views_bulk_operations']['vbo']['operations']['action::views_bulk_operations_modify_action']
+    ['settings']['display_values']['stanford_event::field_s_related_content'] = 'stanford_event::field_s_related_content';
+  }
+  else {
+    $options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action'] =
+      array(
+        'selected' => 1,
+        'postpone_processing' => 0,
+        'skip_confirmation' => 0,
+        'override_label' => 1,
+        'label' => 'Modify',
+        'settings' => array(
+          'show_all_tokens' => 0,
+          'display_values' => array(
+            'stanford_event::field_s_event_type' => 'stanford_event::field_s_event_type',
+            'stanford_event::field_s_related_content' => 'stanford_event::field_s_related_content',
+          ),
+        ),
+      );
+  }
+
+
+  $handler->set_option('fields', $options);
 
   // Check that the view still works after we altered it!
   if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_content')) {
@@ -256,4 +335,96 @@ function stanford_related_content_add_footer_more_link($display_handler, $url){
 
   $display_handler->set_option('footer', $options);
   return $display_handler;
+}
+
+/*
+ * Adds the related content field after the location field.
+ * This would be used for the manage content view.
+ *
+ * @param string $view
+ *   View to be altered.
+ * @param string $display_id
+ *   Display to be altered
+ *
+ */
+function stanford_related_content_insert_related_content (&$view, &$display_id, $after_field) {
+
+  $options['field_s_related_content']['id'] = 'field';
+  $options['field_s_related_content']['table'] = 'field_data_field_s_related_content';
+  $options['field_s_related_content']['field'] = 'field';
+  $options['field_s_related_content']['type'] = 'taxonomy_term_reference_plain';
+  $options['field_s_related_content']['delta_offset'] = '0';
+  $options['field_s_related_content']['multi_type'] = 'ul';
+
+  stanford_related_content_insert_item ($view, $display_id, 'field', 'field_data_field_s_related_content', 'field_s_related_content', $options, $after_field);
+}
+
+/*
+ * Adds the field after the given field.
+ *
+ * @param string $view
+ *   View to be altered.
+ * @param string $display_id
+ *   Display to be altered
+ * @param string $type
+ *   Type of item to be altered
+ * @param string $table
+ *   Table name of the item to be inserted
+ *  @param string $field
+ *   Name of the item to be inserted
+ *  @param array $options
+ *   options to be included when inserting the item
+ *  @param string $after_field
+ *    Name of field to insert after, if it is 0, it is inserted first.
+ *
+ */
+function stanford_related_content_insert_item ($view, $display_id, $type, $table, $field, $options = array(),
+                                                $after_field = NULL){
+
+  if (!$view->set_display($display_id)) {
+    watchdog('stanford_related_content', "Display %display_id not available in view %view_name.",
+      array('%display_id' => $display_id, '%view_name' => $view->name), WATCHDOG_NOTICE);
+    return FALSE;
+  }
+
+  // Get all of the fields.
+  $items = $view->get_items($type, $display_id);
+  $added_item = FALSE;
+
+  if ($after_field == NULL){
+    // Add it first
+    $view->add_item($view->current_display, $type, $table, $field, $options);
+    $added_item = TRUE;
+  }
+
+  // Re-arrange the fields.
+  foreach ($items as $field_name => $value) {
+
+    // Need to remove the item to change the order.
+    $view->set_item($display_id, $type, $field_name, NULL);
+
+    // Don't add it twice.
+    if (!$added_item) {
+
+      // If the field is the field we want, insert the new field after.
+      if ($field_name == $after_field) {
+        // Set the event field type first.
+        $view->set_item($display_id, $type, $field_name, $value);
+
+        // Then add the new item
+        $view->add_item($display_id, $type, $table, $field, $options);
+        $added_item = TRUE;
+
+
+        continue;
+      }
+    }
+    // All other items just get saved in the same order.
+    $view->set_item($display_id, $type, $field_name, $value);
+  }
+
+  // if we didn't find the after_field, append the new field.
+  if (!$added_item){
+    $view->add_item($display_id, $type, $table, $field, $options);
+  }
 }

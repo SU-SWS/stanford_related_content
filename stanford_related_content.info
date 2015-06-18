@@ -1,5 +1,5 @@
 name = Stanford Related Content
-description = Defines relationships for displaying aggregated content 
+description = Defines relationships for displaying aggregated content
 core = 7.x
 package = Stanford
 version = 7.x-1.0-alpha1

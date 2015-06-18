@@ -41,81 +41,32 @@ function stanford_related_events_alter_upcoming_page(&$views) {
  *    View to be altered.
  */
 function stanford_related_events_alter_manage_events(&$views) {
-  $name = 'stanford_events_manage';
-  if (array_key_exists($name, $views)) {
-    $view = $views[$name];
+  $view_name = 'stanford_events_manage';
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
   }
   else {
     return FALSE;
   }
 
-  if ($view->set_display('page')) {
+  $display_name = 'page';
+  if ($view->set_display($display_name)) {
     $handler = $view->display_handler;
   }
   else {
-    watchdog('stanford_related_events', "Display 'page' not available in view %name.",
-      array('%name' => $name), WATCHDOG_NOTICE);
+    watchdog('stanford_related_events', "Display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_NOTICE);
     return FALSE;
   }
 
   // Add the exposed filter.
-  stanford_related_content_add_exposed_filter($views, $name, 'page', FALSE);
+  return((stanford_related_content_add_exposed_filter($views, $view_name, $display_name, FALSE)) &&
 
-  /**
-   * Add event series column to manage events view.
-   * @var [type]
-   */
-  /*
-  if ($view->name == 'stanford_events_manage' && $view->current_display == "page") {
-
-    // Get all of the page fields.
-    $items = $view->get_items("field", "page");
-
-    // Let us re-arrange the fields.
-    foreach ($items as $field_name => $value) {
-
-      // Got to remove the item to change the order.
-      $view->set_item("page", "field", $field_name, NULL);
-
-      // If the field is the event type field we want to insert the series after.
-      if ($field_name == "field_s_event_type") {
-        // Set the event field type first.
-        $view->set_item("page", "field", $field_name, $value);
-
-        // Then create the multiple value field using UL list.
-        $view->add_item($view->current_display, 'field', 'field_data_field_s_event_series', 'field_s_event_series', array(
-            'label' => t('Event series'),
-            'element_default_classes' => 1,
-            'element_label_colon' => 0,
-            'hide_empty' => 1,
-            'settings' => array(
-              'link' => 1,
-            ),
-            'group_type' => "group",
-            'group_rows' => 1,
-            'multi_type' => "ul",
-          ),
-          'field_s_event_series');
-
-        continue;
-      }
-
-      // All other items just get saved in the same order.
-      $view->set_item("page", "field", $field_name, $value);
-
-    }
-
-  }
-*/
-
-  // Add Field: Content: Related Content.
+    // Add the VBO.
+    (stanford_related_content_add_vbo($views, $view_name, $display_name)));
+}
+/*
   $options = $handler->get_option('fields');
-  $options['field_s_related_content']['id'] = 'field_s_related_content';
-  $options['field_s_related_content']['table'] = 'field_data_field_s_related_content';
-  $options['field_s_related_content']['field'] = 'field_s_related_content';
-  $options['field_s_related_content']['type'] = 'taxonomy_term_reference_plain';
-  $options['field_s_related_content']['delta_offset'] = '0';
-  $options['field_s_related_content']['multi_type'] = 'ul';
 
   // Add VBO option.
   // VBO 7.x-3.2
@@ -153,14 +104,16 @@ function stanford_related_events_alter_manage_events(&$views) {
   $handler->set_option('fields', $options);
 
   // Check that the view still works after we altered it!
-  if (stanford_related_content_validate_view($views[$name], 'stanford_related_events')) {
-    watchdog($name, "Filter 'field_s_related_content' added to  view %name.",
-      array('%name' => $name), WATCHDOG_DEBUG);
+  if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_events')) {
+    watchdog('stanford_related_events', "Filter 'field_s_related_content' added to  view %view_name.",
+      array('%view_name' => $view_name), WATCHDOG_DEBUG);
     return TRUE;
   }
   return FALSE;
-}
 
+
+}
+*/
 
 /**
  * Copy the block display in the stanford_events_view and add contextual filter.
@@ -232,4 +185,16 @@ function stanford_related_events_views_pre_build(&$view) {
       $view->footer["area"]->options["content"] = stanford_related_content_add_more_link($subject, "See more related events");
     }
   }
+}
+
+/**
+ * Implementation of hook_views_pre_view().
+ */
+
+function stanford_related_events_views_pre_view(&$view, &$display_id, &$args) {
+
+  // Insert the related content field after the location field
+  if ($view->name == 'stanford_events_manage' && $view->current_display == "page") {
+    stanford_related_content_insert_related_content ($view, $display_id, 'field_stanford_event_location');
+ }
 }
