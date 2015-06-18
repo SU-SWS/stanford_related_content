@@ -259,11 +259,32 @@ function stanford_related_content_add_footer_more_link($display_handler, $url){
 }
 
 /*
+ * Adds the related content field after the location field.
+ *
+ * @param string $view
+ *   View to be altered.
+ * @param string $display_id
+ *   Display to be altered
+ *
+ */
+function stanford_related_content_insert_related_content (&$view, &$display_id, $after_field) {
+
+  $options['field_s_related_content']['id'] = 'field';
+  $options['field_s_related_content']['table'] = 'field_data_field_s_related_content';
+  $options['field_s_related_content']['field'] = 'field';
+  $options['field_s_related_content']['type'] = 'taxonomy_term_reference_plain';
+  $options['field_s_related_content']['delta_offset'] = '0';
+  $options['field_s_related_content']['multi_type'] = 'ul';
+
+  stanford_related_content_insert_item ($view, $display_id, 'field', 'field_data_field_s_related_content', 'field_s_related_content', $options, $after_field);
+}
+
+/*
  * Adds the field after the given field.
  *
  * @param string $view
  *   View to be altered.
- * @param string $display_name
+ * @param string $display_id
  *   Display to be altered
  * @param string $type
  *   Type of item to be altered
@@ -318,6 +339,7 @@ function stanford_related_content_insert_item ($view, $display_id, $type, $table
         continue;
       }
     }
+    // All other items just get saved in the same order.
     $view->set_item($display_id, $type, $field_name, $value);
   }
 
@@ -325,8 +347,4 @@ function stanford_related_content_insert_item ($view, $display_id, $type, $table
   if (!$added_item){
     $view->add_item($display_id, $type, $table, $field, $options);
   }
-
-  dpm ($items);
-  // All other items just get saved in the same order.
-
 }

@@ -63,70 +63,6 @@ function stanford_related_events_alter_manage_events(&$views) {
   stanford_related_content_add_exposed_filter($views, $view_name, $display_name, FALSE);
 
 
-  /**
-   * Add event series column to manage events view.
-   * @var [type]
-   */
-  /*
-  if ($view->name == 'stanford_events_manage' && $view->current_display == "page") {
-
-    // Get all of the page fields.
-    $items = $view->get_items("field", "page");
-
-    // Let us re-arrange the fields.
-    foreach ($items as $field_name => $value) {
-
-      // Got to remove the item to change the order.
-      $view->set_item("page", "field", $field_name, NULL);
-
-      // If the field is the event type field we want to insert the series after.
-      if ($field_name == "field_s_event_type") {
-        // Set the event field type first.
-        $view->set_item("page", "field", $field_name, $value);
-
-        // Then create the multiple value field using UL list.
-        $view->add_item($view->current_display, 'field', 'field_data_field_s_event_series', 'field_s_event_series', array(
-            'label' => t('Event series'),
-            'element_default_classes' => 1,
-            'element_label_colon' => 0,
-            'hide_empty' => 1,
-            'settings' => array(
-              'link' => 1,
-            ),
-            'group_type' => "group",
-            'group_rows' => 1,
-            'multi_type' => "ul",
-          ),
-          'field_s_event_series');
-
-        continue;
-      }
-
-      // All other items just get saved in the same order.
-      $view->set_item("page", "field", $field_name, $value);
-
-    }
-
-  }
-*/
-
-  // Add Field: Content: Related Content.
-/*  $type = 'fields';
-  $table = 'field_data_field_s_related_content';
-  $field = 'field_s_related_content';
-  $after_field = 0;
-
-  $options = $handler->get_option($type);
-  $options['field_s_related_content']['id'] = $field;
-  $options['field_s_related_content']['table'] = $table;
-  $options['field_s_related_content']['field'] = $field;
-  $options['field_s_related_content']['type'] = 'taxonomy_term_reference_plain';
-  $options['field_s_related_content']['delta_offset'] = '0';
-  $options['field_s_related_content']['multi_type'] = 'ul';
-
-  stanford_related_content_insert_item ($views, $view_name, $display_name, $type, $table, $field, $options,
-    $after_field);*/
-
   $options = $handler->get_option('fields');
 
   // Add VBO option.
@@ -251,21 +187,9 @@ function stanford_related_events_views_pre_build(&$view) {
  */
 
 function stanford_related_events_views_pre_view(&$view, &$display_id, &$args) {
+
+  // Insert the related content field after the location field
   if ($view->name == 'stanford_events_manage' && $view->current_display == "page") {
-  // Add Field: Content: Related Content.
-  $type = 'field';
-  $table = 'field_data_field_s_related_content';
-  $field = 'field_s_related_content';
-  $after_field = 'field_stanford_event_location';
-
-  $options['field_s_related_content']['id'] = $field;
-  $options['field_s_related_content']['table'] = $table;
-  $options['field_s_related_content']['field'] = $field;
-  $options['field_s_related_content']['type'] = 'taxonomy_term_reference_plain';
-  $options['field_s_related_content']['delta_offset'] = '0';
-  $options['field_s_related_content']['multi_type'] = 'ul';
-
-  stanford_related_content_insert_item ($view, $display_id, $type, $table, $field, $options, $after_field);
-
+    stanford_related_content_insert_related_content ($view, $display_id, 'field_stanford_event_location');
  }
 }
