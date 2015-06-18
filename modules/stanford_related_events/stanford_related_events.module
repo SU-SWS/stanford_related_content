@@ -111,7 +111,7 @@ function stanford_related_events_alter_manage_events(&$views) {
 */
 
   // Add Field: Content: Related Content.
-  $type = 'fields';
+/*  $type = 'fields';
   $table = 'field_data_field_s_related_content';
   $field = 'field_s_related_content';
   $after_field = 0;
@@ -125,7 +125,9 @@ function stanford_related_events_alter_manage_events(&$views) {
   $options['field_s_related_content']['multi_type'] = 'ul';
 
   stanford_related_content_insert_item ($views, $view_name, $display_name, $type, $table, $field, $options,
-    $after_field);
+    $after_field);*/
+
+  $options = $handler->get_option('fields');
 
   // Add VBO option.
   // VBO 7.x-3.2
@@ -242,4 +244,28 @@ function stanford_related_events_views_pre_build(&$view) {
       $view->footer["area"]->options["content"] = stanford_related_content_add_more_link($subject, "See more related events");
     }
   }
+}
+
+/**
+ * Implementation of hook_views_pre_view().
+ */
+
+function stanford_related_events_views_pre_view(&$view, &$display_id, &$args) {
+  if ($view->name == 'stanford_events_manage' && $view->current_display == "page") {
+  // Add Field: Content: Related Content.
+  $type = 'field';
+  $table = 'field_data_field_s_related_content';
+  $field = 'field_s_related_content';
+  $after_field = 'field_stanford_event_location';
+
+  $options['field_s_related_content']['id'] = $field;
+  $options['field_s_related_content']['table'] = $table;
+  $options['field_s_related_content']['field'] = $field;
+  $options['field_s_related_content']['type'] = 'taxonomy_term_reference_plain';
+  $options['field_s_related_content']['delta_offset'] = '0';
+  $options['field_s_related_content']['multi_type'] = 'ul';
+
+  stanford_related_content_insert_item ($view, $display_id, $type, $table, $field, $options, $after_field);
+
+ }
 }
