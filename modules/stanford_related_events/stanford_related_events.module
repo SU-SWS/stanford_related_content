@@ -60,9 +60,12 @@ function stanford_related_events_alter_manage_events(&$views) {
   }
 
   // Add the exposed filter.
-  stanford_related_content_add_exposed_filter($views, $view_name, $display_name, FALSE);
+  return((stanford_related_content_add_exposed_filter($views, $view_name, $display_name, FALSE)) &&
 
-
+    // Add the VBO.
+    (stanford_related_content_add_vbo($views, $view_name, $display_name)));
+}
+/*
   $options = $handler->get_option('fields');
 
   // Add VBO option.
@@ -107,8 +110,10 @@ function stanford_related_events_alter_manage_events(&$views) {
     return TRUE;
   }
   return FALSE;
-}
 
+
+}
+*/
 
 /**
  * Copy the block display in the stanford_events_view and add contextual filter.
