@@ -38,7 +38,6 @@ function stanford_related_events_uninstall() {
   stanford_related_events_uninstall_upcoming_block($views);
   stanford_related_events_uninstall_upcoming_page($views);
   stanford_related_events_uninstall_manage_events($views);
-
 }
 
 /**
@@ -122,12 +121,12 @@ function stanford_related_events_uninstall_manage_events(&$views, $name = 'stanf
 
       // Remove the VBO.
       if (isset($options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
-      ['settings']['display_values']['stanford_event::field_s_related_content'])){
+      ['settings']['display_values']['stanford_event::field_s_related_content'])) {
         unset($options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
           ['settings']['display_values']['stanford_event::field_s_related_content']);
       }
       elseif (isset($options['views_bulk_operations']['vbo']['operations']['action::views_bulk_operations_modify_action']
-      ['settings']['display_values']['stanford_event::field_s_related_content'])){
+      ['settings']['display_values']['stanford_event::field_s_related_content'])) {
         unset($options['views_bulk_operations']['vbo']['operations']['action::views_bulk_operations_modify_action']
           ['settings']['display_values']['stanford_event::field_s_related_content']);
       }
