@@ -5,38 +5,3 @@
  */
 
 include_once 'stanford_related_page.features.inc';
-
-/**
- * Implementation of hook_node_view().
- */
-function stanford_related_page_node_view($node, $view_mode, $langcode) {
-
- // dpm($node);
-  if ($view_mode == 'full') {
-    hide($node->content['field_s_related_content']);
-  }
-}
-
-function stanford_related_page_node_view_alter(&$build) {
-//  dpm($build);
-  if (($build['#bundle'] == 'stanford_page') && ($build['#view_mode'] == 'full')) {
-    unset($build['field_s_related_content']);
-    //$build['field_s_related_content']['#printed'] = false;
-  }
-}
-
-function stanford_related_page_page_alter(&$page) {
-  //dpm($page);
-
-}
-
-function stanford_related_page_page_build(&$page) {
-  dpm($page);
-
-}
-
-function stanford_related_page_field_attach_load($entity_type, $entities, $age, $options){
-  dpm($entities);
-  unset($entities[1]->field_s_related_content);
-  dpm($entities);
-}
