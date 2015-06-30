@@ -22,7 +22,7 @@ function stanford_related_publication_field_default_field_instances() {
         'label' => 'above',
         'module' => 'taxonomy',
         'settings' => array(),
-        'type' => 'taxonomy_term_reference_link',
+        'type' => 'hidden',
         'weight' => 15,
       ),
       'teaser' => array(
