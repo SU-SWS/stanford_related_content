@@ -7,8 +7,7 @@
 /**
  * Implements hook_field_default_field_instances().
  */
-function stanford_related_events_field_default_field_instances() 
-{
+function stanford_related_events_field_default_field_instances() {
     $field_instances = array();
 
     // Exported field_instance: 'node-stanford_event-field_s_related_content'

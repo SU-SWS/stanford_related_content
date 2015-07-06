@@ -1,7 +1,6 @@
 <?php
 /**
  * @file
- * Drupal needs this blank file.
  */
 
 /**
@@ -40,7 +39,7 @@ function stanford_related_news_alter_manage_news(&$views) {
   // Add the exposed filter.
   return((stanford_related_content_add_exposed_filter($views, $view_name, $display_name, FALSE, "Related Content"))
 
-    // Add the VBO.
+    // TODO: Add the VBO.
 //    && (stanford_related_content_add_vbo($views, $view_name, $display_name))
   );
 }
@@ -56,3 +55,4 @@ function stanford_related_news_views_pre_view(&$view, &$display_id, &$args) {
     stanford_related_content_insert_related_content ($view, $display_id, 'field_s_news_source');
   }
 }
+

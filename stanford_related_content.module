@@ -6,7 +6,7 @@
 
 /**
  * Utility Functions ----------------------------------------------------------------------------
- **/
+ */
 
 /*
  * This rewrites the pattern in the subject. It replaces it with
@@ -14,7 +14,7 @@
  * 2) a link built with the url in the subject plus the taxonomy terms
  *
  */
-function stanford_related_content_add_more_link($subject, $link_text = "See more", $pattern = "/\[hook_views_pre_build:.*\]/" ){
+function stanford_related_content_add_more_link($subject, $link_text = "See more", $pattern = "/\[hook_views_pre_build:.*\]/" ) {
   $matches = array();
   preg_match($pattern, $subject, $matches);
   if (!empty($matches)) {
