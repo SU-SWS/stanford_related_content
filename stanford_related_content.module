@@ -92,7 +92,7 @@ function stanford_related_content_add_exposed_filter($views, $view_name, $displa
     $view = $views[$view_name];
   }
   else {
-    watchdog('stanford_related_events', "View %view_name not available.",
+    watchdog('stanford_related_content', "View %view_name not available.",
       array('%view_name' => $view_name), WATCHDOG_DEBUG);
     return FALSE;
   }
@@ -101,7 +101,7 @@ function stanford_related_content_add_exposed_filter($views, $view_name, $displa
     $handler = $view->display_handler;
   }
   else {
-    watchdog('stanford_related_events', "Display %display_name not available in view %view_name.",
+    watchdog('stanford_related_content', "Display %display_name not available in view %view_name.",
       array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
     return FALSE;
   }
@@ -162,7 +162,7 @@ function stanford_related_content_add_vbo($views, $view_name, $display_name = 'p
     $view = $views[$view_name];
   }
   else {
-    watchdog('stanford_related_events', "View %view_name not available.",
+    watchdog('stanford_related_content', "View %view_name not available.",
       array('%view_name' => $view_name), WATCHDOG_DEBUG);
     return FALSE;
   }
@@ -171,7 +171,7 @@ function stanford_related_content_add_vbo($views, $view_name, $display_name = 'p
     $handler = $view->display_handler;
   }
   else {
-    watchdog('stanford_related_events', "Display %display_name not available in view %view_name.",
+    watchdog('stanford_related_content', "Display %display_name not available in view %view_name.",
       array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
     return FALSE;
   }
@@ -258,7 +258,7 @@ function stanford_related_content_copy_display($views, $view_name, $display_name
     $options_orig = $display_orig->display->display_options;
   }
   else {
-    watchdog('stanford_related_events', "Display options for display %display_name not available in view %view_name.",
+    watchdog('stanford_related_content', "Display options for display %display_name not available in view %view_name.",
       array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_NOTICE);
     return FALSE;
   }
