@@ -106,7 +106,7 @@ function stanford_related_events_alter_upcoming_block(&$views) {
   }
 
   // Add contextual filter and more link
-  $handler = stanford_related_content_add_contextual_filter($handler);
+  $handler = stanford_related_content_add_contextual_filter($handler, 'Related Upcoming Events');
   $handler = stanford_related_content_add_footer_more_link($handler, $page_path);
 
   // Check that the view still works after we altered it!
