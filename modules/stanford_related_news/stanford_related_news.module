@@ -8,7 +8,7 @@
  */
 function stanford_related_news_views_default_views_alter(&$views) {
   stanford_related_news_alter_3_item_block($views);
-  //stanford_related_news_alter_page($views);
+  stanford_related_news_alter_page($views);
   stanford_related_news_alter_manage_news($views);
 }
 /**
@@ -128,4 +128,20 @@ function stanford_related_news_alter_3_item_block(&$views) {
     return TRUE;
   }
   return FALSE;
+}
+
+/* *
+ * Add related content to the page display or upcoming_news_page_list
+ *
+ * @param object $views
+ *   Array of views.
+ */
+
+function stanford_related_news_alter_page(&$views) {
+
+  // Add related content to the exposed filter
+  $page_result = stanford_related_content_add_exposed_filter($views, 'stanford_news', 'page_1', TRUE);
+  $upcoming_page_result = stanford_related_content_add_exposed_filter($views, 'stanford_news', 'recent_news_page_2', TRUE);
+
+  return ($page_result || $upcoming_page_result);
 }
