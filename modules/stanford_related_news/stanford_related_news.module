@@ -56,3 +56,60 @@ function stanford_related_news_views_pre_view(&$view, &$display_id, &$args) {
   }
 }
 
+/**
+ * Copy the block display in the stanford_news_view and add contextual filter.
+ *
+ * @param object $views
+ *   Array of views.
+ */
+function stanford_related_news_alter_3_item_block(&$views) {
+  $view_name = 'stanford_news';
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+  }
+  else {
+    watchdog('stanford_related_news', "View '%name' not available.",
+      array('%name' => $view_name), WATCHDOG_DEBUG);
+    return FALSE;
+  }
+
+  // Get the page URL
+  $page_handler = null;
+  if (isset($view->display['page_1'])) {
+    if ($view->set_display('page_1')) {
+      $page_handler = $view->display_handler;
+    }
+  }
+  // Is it overridden?
+  /*
+  elseif (isset($view->display['upcoming_news_list_page'])){
+    if ($view->set_display('upcoming_news_list_page')){
+      $page_handler = $view->display_handler;
+    }
+  }
+  */
+  if ($page_handler == null) {
+    watchdog('stanford_related_news', "Display not available in view %view_name.",
+      array('%view_name' => $view_name), WATCHDOG_DEBUG);
+    return FALSE;
+  }
+  $page_path = $page_handler->get_option('path');
+
+  // Copy the block display.
+  $handler = stanford_related_content_copy_display($views, $view_name, 'block_1', 'Filtered News Block', 'filtered_3_news_block');
+  if ($handler == FALSE) {
+    return FALSE;
+  }
+
+  // Add contextual filter and more link
+  $handler = stanford_related_content_add_contextual_filter($handler);
+  $handler = stanford_related_content_add_footer_more_link($handler, $page_path);
+
+  // Check that the view still works after we altered it!
+  if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_news')) {
+    watchdog('stanford_related_news', "Block 'filtered_3_news_block' added to view %view_name.",
+      array('%view_name' => $view_name), WATCHDOG_DEBUG);
+    return TRUE;
+  }
+  return FALSE;
+}
