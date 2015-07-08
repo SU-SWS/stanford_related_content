@@ -6,7 +6,7 @@
 
 /**
  * Utility Functions ----------------------------------------------------------------------------
- **/
+ */
 
 /**
  * This rewrites the pattern in the subject.
@@ -301,7 +301,7 @@ function stanford_related_content_copy_display($views, $view_name, $display_name
  * @return [type]
  *   [description]
  */
-function stanford_related_content_add_contextual_filter($display_handler) {
+function stanford_related_content_add_contextual_filter($display_handler, $title = 'Related Content') {
 
   // Override defaults.
   $options = $display_handler->get_option('defaults');
@@ -315,7 +315,7 @@ function stanford_related_content_add_contextual_filter($display_handler) {
   $options['term_node_tid_depth']['field'] = 'term_node_tid_depth';
   $options['term_node_tid_depth']['default_action'] = 'default';
   $options['term_node_tid_depth']['title_enable'] = TRUE;
-  $options['term_node_tid_depth']['title'] = 'Related Upcoming Events ';
+  $options['term_node_tid_depth']['title'] = $title;
   $options['term_node_tid_depth']['default_argument_type'] = 'taxonomy_tid';
   $options['term_node_tid_depth']['default_argument_options']['node'] = TRUE;
   $options['term_node_tid_depth']['default_argument_options']['anyall'] = '+';
