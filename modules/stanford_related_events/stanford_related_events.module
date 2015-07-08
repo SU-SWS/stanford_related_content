@@ -15,21 +15,22 @@ function stanford_related_events_views_default_views_alter(&$views) {
   stanford_related_events_alter_upcoming_page($views);
   stanford_related_events_alter_manage_events($views);
 }
-/* *
- * Add related content to the page display or upcoming_events_page_list
+
+/**
+ * Add related content to the page display or upcoming_events_page_list.
  *
  * @param object $views
- *   Array of views.
+ *   An array of views
  */
-
 function stanford_related_events_alter_upcoming_page(&$views) {
 
-  // Add related content to the exposed filter
+  // Add related content to the exposed filter.
   $page_result = stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'page', TRUE);
   $upcoming_page_result = stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'upcoming_events_list_page', TRUE);
 
   return ($page_result || $upcoming_page_result);
 }
+
 /**
  * Add exposed filter for related content to the page display.
  *
@@ -38,14 +39,14 @@ function stanford_related_events_alter_upcoming_page(&$views) {
  */
 function stanford_related_events_alter_manage_events(&$views) {
   $view_name = 'stanford_events_manage';
-  if (array_key_exists($view_name, $views)) {
-    $view = $views[$view_name];
-  }
-  else {
+
+  if (!array_key_exists($view_name, $views)) {
     return FALSE;
   }
 
+  $view = $views[$view_name];
   $display_name = 'page';
+
   if ($view->set_display($display_name)) {
     $handler = $view->display_handler;
   }
@@ -56,10 +57,15 @@ function stanford_related_events_alter_manage_events(&$views) {
   }
 
   // Add the exposed filter.
-  return((stanford_related_content_add_exposed_filter($views, $view_name, $display_name, FALSE)) &&
+  $xp = stanford_related_content_add_exposed_filter($views, $view_name, $display_name, FALSE);
+  // Add the VBO.
+  $vbo = stanford_related_content_add_vbo($views, $view_name, $display_name);
 
-    // Add the VBO.
-    (stanford_related_content_add_vbo($views, $view_name, $display_name)));
+  if ($xp && $vbo) {
+    return TRUE;
+  }
+
+  return FALSE;
 }
 
 /**
@@ -70,6 +76,7 @@ function stanford_related_events_alter_manage_events(&$views) {
  */
 function stanford_related_events_alter_upcoming_block(&$views) {
   $view_name = 'stanford_events_views';
+
   if (array_key_exists($view_name, $views)) {
     $view = $views[$view_name];
   }
@@ -79,33 +86,35 @@ function stanford_related_events_alter_upcoming_block(&$views) {
     return FALSE;
   }
 
-  // Get the page URL
-  $page_handler = null;
+  // Get the page URL.
+  $page_handler = NULL;
   if (isset($view->display['page'])) {
     if ($view->set_display('page')) {
       $page_handler = $view->display_handler;
     }
   }
   // Is it overridden?
-  elseif (isset($view->display['upcoming_events_list_page'])){
-    if ($view->set_display('upcoming_events_list_page')){
+  elseif (isset($view->display['upcoming_events_list_page'])) {
+    if ($view->set_display('upcoming_events_list_page')) {
       $page_handler = $view->display_handler;
     }
   }
-  if ($page_handler == null) {
+  if ($page_handler == NULL) {
     watchdog('stanford_related_events', "Display not available in view %view_name.",
       array('%view_name' => $view_name), WATCHDOG_DEBUG);
     return FALSE;
   }
+
   $page_path = $page_handler->get_option('path');
 
   // Copy the block display.
   $handler = stanford_related_content_copy_display($views, $view_name, 'block', 'Filtered Upcoming Block', 'filtered_upcoming_block');
+
   if ($handler == FALSE) {
     return FALSE;
   }
 
-  // Add contextual filter and more link
+  // Add contextual filter and more link.
   $handler = stanford_related_content_add_contextual_filter($handler, 'Related Upcoming Events');
   $handler = stanford_related_content_add_footer_more_link($handler, $page_path);
 
@@ -115,6 +124,7 @@ function stanford_related_events_alter_upcoming_block(&$views) {
       array('%view_name' => $view_name), WATCHDOG_DEBUG);
     return TRUE;
   }
+
   return FALSE;
 }
 
@@ -125,7 +135,7 @@ function stanford_related_events_alter_upcoming_block(&$views) {
  *   with a link to the related view page.
  */
 function stanford_related_events_views_pre_build(&$view) {
-  if ($view->name == "stanford_events_views"){
+  if ($view->name == "stanford_events_views") {
     if (($view->current_display == "filtered_upcoming_block") ||
       ($view->current_display == "block_5")) {
       $subject = $view->footer["area"]->options["content"];
@@ -137,11 +147,11 @@ function stanford_related_events_views_pre_build(&$view) {
 /**
  * Implementation of hook_views_pre_view().
  */
-
 function stanford_related_events_views_pre_view(&$view, &$display_id, &$args) {
 
-  // Insert the related content field after the location field
+  // Insert the related content field after the location field.
   if ($view->name == 'stanford_events_manage' && $view->current_display == "page") {
-    stanford_related_content_insert_related_content ($view, $display_id, 'field_stanford_event_location');
- }
+    stanford_related_content_insert_related_content($view, $display_id, 'field_stanford_event_location');
+  }
+
 }

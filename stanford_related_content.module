@@ -8,13 +8,14 @@
  * Utility Functions ----------------------------------------------------------------------------
  */
 
-/*
- * This rewrites the pattern in the subject. It replaces it with
+/**
+ * This rewrites the pattern in the subject.
+ *
+ * It replaces it with
  * 1) the link text
  * 2) a link built with the url in the subject plus the taxonomy terms
- *
  */
-function stanford_related_content_add_more_link($subject, $link_text = "See more", $pattern = "/\[hook_views_pre_build:.*\]/" ) {
+function stanford_related_content_add_more_link($subject, $link_text = "See more", $pattern = "/\[hook_views_pre_build:.*\]/") {
   $matches = array();
   preg_match($pattern, $subject, $matches);
   if (!empty($matches)) {
@@ -22,9 +23,17 @@ function stanford_related_content_add_more_link($subject, $link_text = "See more
     // Build the URL.
     $parts = explode(":", $matches[0]);
     $url = str_replace("]", "", $parts[1]);
-    $options = array( 'attributes' => array( 'class' => array('more-link') ),
-      'query' => array( stanford_related_content_build_tax_args() )
+    $args = stanford_related_content_build_tax_args();
+
+    $options = array(
+      'attributes' => array(
+        'class' => array(
+          'more-link'
+        ),
+      ),
+      'query' => array($args),
     );
+
     $a = l(t($link_text), $url, $options);
 
     // Replace text with the URL.
@@ -33,8 +42,11 @@ function stanford_related_content_add_more_link($subject, $link_text = "See more
   return $subject;
 }
 
-/*
- * This takes the related_content terms from the current node and builds them into arguments for link options.
+/**
+ * Build link arguments.
+ *
+ * This takes the related_content terms from the current node and builds them
+ * into arguments for link options.
  *
  * @returns array of arguments
  */
@@ -54,13 +66,13 @@ function stanford_related_content_build_tax_args() {
   return $result;
 }
 
-/*
+/**
  * Validates a view and sets a notice if it doesn't validate.
  *
- * @param view
- * @param name
- *   the name of the module
- *
+ * @param Objet $view
+ *   The view.
+ * @param string $name
+ *   The name of the module
  */
 function stanford_related_content_validate_view($view, $name = 'stanford_related_content') {
 
@@ -75,16 +87,20 @@ function stanford_related_content_validate_view($view, $name = 'stanford_related
     return FALSE;
   }
 }
-/*
- * Given a view and display, this adds the related content exposed filter to the display
+
+/**
+ * Add the related content exposed filter to a display.
  *
- * @param $view
+ * Given a view and display, this adds the related content exposed filter to the
+ * display
+ *
+ * @param object $views
  *   View to be altered
  * @param string $view_name
  *   View to be altered.
  * @param string $display_name
  *   Display to be altered.
- * @param boolean $multiple
+ * @param bool $multiple
  *   Indicates if the filter should be multiple select
  */
 function stanford_related_content_add_exposed_filter($views, $view_name, $display_name = 'page', $multiple = FALSE, $label = "Filter by related content") {
@@ -145,17 +161,15 @@ function stanford_related_content_add_exposed_filter($views, $view_name, $displa
   }
 }
 
-/*
- * Given a view and display, this adds the related content VBO to the display
+/**
+ * Given a view and display, this adds the related content VBO to the display.
  *
- * @param $view
+ * @param array $views
  *   View to be altered
  * @param string $view_name
  *   View to be altered.
  * @param string $display_name
  *   Display to be altered.
- * @param boolean $multiple
- *   Indicates if the filter should be multiple select
  */
 function stanford_related_content_add_vbo($views, $view_name, $display_name = 'page') {
   if (array_key_exists($view_name, $views)) {
@@ -224,9 +238,16 @@ function stanford_related_content_add_vbo($views, $view_name, $display_name = 'p
   }
 }
 
-/*
- * Return the handler to a copy of a display
+/**
  *
+ * Return the handler to a copy of a display.
+ *
+ * @param  [type] $views        [description]
+ * @param  [type] $view_name    [description]
+ * @param  [type] $display_name [description]
+ * @param  [type] $new_title    [description]
+ * @param  [type] $new_id       [description]
+ * @return [type]               [description]
  */
 function stanford_related_content_copy_display($views, $view_name, $display_name, $new_title = NULL, $new_id = NULL) {
   if (array_key_exists($view_name, $views)) {
@@ -247,7 +268,7 @@ function stanford_related_content_copy_display($views, $view_name, $display_name
     return FALSE;
   }
 
-  // Get the type of display
+  // Get the type of display.
   $type = $display_orig->display->display_plugin;
 
   // Get the display options.
@@ -271,9 +292,14 @@ function stanford_related_content_copy_display($views, $view_name, $display_name
   return $handler;
 }
 
-/*
- * Adds the related content to the contextual filter in the given display
+/**
+ * Adds the related content to the contextual filter in the given display.
  *
+ * @param [type] $display_handler
+ *   [description]
+ *
+ * @return [type]
+ *   [description]
  */
 function stanford_related_content_add_contextual_filter($display_handler, $title = 'Related Content') {
 
@@ -307,9 +333,17 @@ function stanford_related_content_add_contextual_filter($display_handler, $title
   return $display_handler;
 
 }
-/*
- * Adds a more link to footer of the given display
+
+/**
+ * Adds a more link to footer of the given display.
  *
+ * @param [type] $display_handler
+ *   [description]
+ * @param [type] $url
+ *   [description]
+ *
+ * @return [type]
+ *   [description]
  */
 function stanford_related_content_add_footer_more_link($display_handler, $url) {
 
@@ -337,15 +371,15 @@ function stanford_related_content_add_footer_more_link($display_handler, $url) {
   return $display_handler;
 }
 
-/*
+/**
  * Adds the related content field after the location field.
+ *
  * This would be used for the manage content view.
  *
  * @param string $view
  *   View to be altered.
  * @param string $display_id
  *   Display to be altered
- *
  */
 function stanford_related_content_insert_related_content(&$view, &$display_id, $after_field) {
 
@@ -359,7 +393,7 @@ function stanford_related_content_insert_related_content(&$view, &$display_id, $
   stanford_related_content_insert_item($view, $display_id, 'field', 'field_data_field_s_related_content', 'field_s_related_content', $options, $after_field);
 }
 
-/*
+/**
  * Adds the field after the given field.
  *
  * @param string $view
@@ -370,13 +404,12 @@ function stanford_related_content_insert_related_content(&$view, &$display_id, $
  *   Type of item to be altered
  * @param string $table
  *   Table name of the item to be inserted
- *  @param string $field
+ * @param string $field
  *   Name of the item to be inserted
- *  @param array $options
+ * @param array $options
  *   options to be included when inserting the item
- *  @param string $after_field
- *    Name of field to insert after, if it is 0, it is inserted first.
- *
+ * @param string $after_field
+ *   Name of field to insert after, if it is 0, it is inserted first.
  */
 function stanford_related_content_insert_item($view, $display_id, $type, $table, $field, $options = array(),
                                                 $after_field = NULL) {
@@ -392,7 +425,7 @@ function stanford_related_content_insert_item($view, $display_id, $type, $table,
   $added_item = FALSE;
 
   if ($after_field == NULL) {
-    // Add it first
+    // Add it first.
     $view->add_item($view->current_display, $type, $table, $field, $options);
     $added_item = TRUE;
   }
@@ -411,7 +444,7 @@ function stanford_related_content_insert_item($view, $display_id, $type, $table,
         // Set the event field type first.
         $view->set_item($display_id, $type, $field_name, $value);
 
-        // Then add the new item
+        // Then add the new item.
         $view->add_item($display_id, $type, $table, $field, $options);
         $added_item = TRUE;
 
@@ -423,10 +456,11 @@ function stanford_related_content_insert_item($view, $display_id, $type, $table,
     $view->set_item($display_id, $type, $field_name, $value);
   }
 
-  // if we didn't find the after_field, append the new field.
+  // If we didn't find the after_field, append the new field.
   if (!$added_item) {
     $view->add_item($display_id, $type, $table, $field, $options);
   }
+
 }
 /**
  * Remove the added to the display.
