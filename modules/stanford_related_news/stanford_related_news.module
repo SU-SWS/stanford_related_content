@@ -141,7 +141,7 @@ function stanford_related_news_alter_page(&$views) {
 
   // Add related content to the exposed filter
   $page_result = stanford_related_content_add_exposed_filter($views, 'stanford_news', 'page_1', TRUE);
-  $upcoming_page_result = stanford_related_content_add_exposed_filter($views, 'stanford_news', 'recent_news_page_2', TRUE);
+  $soe_page_result = stanford_related_content_add_exposed_filter($views, 'stanford_news', 'recent_news_page_2', TRUE);
 
-  return ($page_result || $upcoming_page_result);
+  return ($page_result || $soe_page_result);
 }
