@@ -97,13 +97,12 @@ function stanford_related_news_alter_3_item_block(&$views) {
     }
   }
   // Is it overridden?
-  /*
-  elseif (isset($view->display['upcoming_news_list_page'])){
-    if ($view->set_display('upcoming_news_list_page')){
+  elseif (isset($view->display['recent_news_page_2'])){
+    if ($view->set_display('recent_news_page_2')){
       $page_handler = $view->display_handler;
     }
   }
-  */
+
   if ($page_handler == null) {
     watchdog('stanford_related_news', "Display not available in view %view_name.",
       array('%view_name' => $view_name), WATCHDOG_DEBUG);
