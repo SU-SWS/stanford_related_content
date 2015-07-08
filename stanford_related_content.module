@@ -428,3 +428,64 @@ function stanford_related_content_insert_item($view, $display_id, $type, $table,
     $view->add_item($display_id, $type, $table, $field, $options);
   }
 }
+/**
+ * Remove the added to the display.
+ *
+ * @param object $views
+ *   Array of views.
+ * @param string $view_name
+ *    View to be altered.
+ * @param string $display_name
+ *    Display to be removed.
+ * @param string $module_name
+ *    Name of originating module.
+ */
+function stanford_related_content_remove_display(&$views, $view_name, $display_name, $module_name = 'stanford_related_content') {
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+    unset($view->display[$display_name]);
+
+    // Check that the view still works after we altered it!
+    if (stanford_related_content_validate_view($view, $module_name)) {
+      $view->save();
+      views_flush_caches();
+      watchdog($module_name, "Display %display_name removed from view %view_name.",
+        array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
+  }
+}
+/**
+ * Remove the filter from the display.
+ *
+ * @param object $views
+ *   Array of views.
+ * @param string $view_name
+ *    View to be altered.
+ * @param string $display_name
+ *    Display to be removed.
+ * @param string $module_name
+ *    Name of originating module.
+ */
+function stanford_related_content_remove_filter(&$views, $view_name, $display_name, $module_name = 'stanford_related_content') {
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+    $filter_name = 'term_node_tid_depth';
+
+    if ($view->set_display($display_name)) {
+      $handler = $view->display_handler;
+
+      // Remove the exposed filter.
+      $options = $handler->get_option('filters');
+      unset($options[$filter_name]);
+      $handler->set_option('filters', $options);
+
+      // Check that the view still works after we altered it!
+      if (stanford_related_content_validate_view($views[$view_name], $module_name)) {
+        $view->save();
+        watchdog($module_name, "Filter %filter_name removed from view %view_name.",
+          array('%filter_name' => $filter_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+      }
+    }
+
+  }
+}
