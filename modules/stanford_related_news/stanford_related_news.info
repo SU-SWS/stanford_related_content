@@ -10,4 +10,5 @@ dependencies[] = stanford_related_content
 dependencies[] = taxonomy
 features[features_api][] = api:2
 features[field_instance][] = node-stanford_news_item-field_s_related_content
-project path = sites/all/modules/stanford/stanford_related_content/modules
+files[] = stanford_related_news.install
+

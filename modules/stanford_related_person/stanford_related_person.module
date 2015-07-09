@@ -6,7 +6,7 @@
  * Implements hook_views_default_views_alter().
  */
 function stanford_related_person_views_default_views_alter(&$views) {
-  //stanford_related_person_alter_block($views);
+  stanford_related_person_alter_block($views);
   //stanford_related_person_alter_page($views);
   stanford_related_person_alter_manage_person($views);
 }
@@ -55,3 +55,64 @@ function stanford_related_person_views_pre_view(&$view, &$display_id, &$args) {
   }
 }
 
+/**
+ * Copy the block display in the stanford_news_view and add contextual filter.
+ *
+ * @param object $views
+ *   Array of views.
+ */
+function stanford_related_person_alter_block(&$views) {
+  $view_name = 'stanford_person_grid';
+  $display_name = 'block';
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+  }
+  else {
+    watchdog('stanford_related_person', "View '%name' not available.",
+      array('%name' => $view_name), WATCHDOG_DEBUG);
+    return FALSE;
+  }
+
+  /* Todo: Do we want to link to the people page?
+  // Get the page URL
+  $page_handler = null;
+  if (isset($view->display['page_1'])) {
+    if ($view->set_display('page_1')) {
+      $page_handler = $view->display_handler;
+    }
+  }
+  // Is it overridden?
+  elseif (isset($view->display['recent_person_page_2'])){
+    if ($view->set_display('recent_person_page_2')){
+      $page_handler = $view->display_handler;
+    }
+  }
+
+  if ($page_handler == null) {
+    watchdog('stanford_related_person', "Display not available in view %view_name.",
+      array('%view_name' => $view_name), WATCHDOG_DEBUG);
+    return FALSE;
+  }
+  $page_path = $page_handler->get_option('path');
+  */
+
+  // Copy the block display.
+  $handler = stanford_related_content_copy_display($views, $view_name, $display_name, 'Filtered Block', 'filtered_block');
+  if ($handler == FALSE) {
+    return FALSE;
+  }
+
+  // Add contextual filter and more link
+  $handler = stanford_related_content_add_contextual_filter($handler, 'Related People');
+  /* TODO: If we link to a page
+  $handler = stanford_related_content_add_footer_more_link($handler, $page_path);
+  */
+
+  // Check that the view still works after we altered it!
+  if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_person')) {
+    watchdog('stanford_related_person', "Block %display_name added to view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    return TRUE;
+  }
+  return FALSE;
+}

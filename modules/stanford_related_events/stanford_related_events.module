@@ -26,7 +26,7 @@ function stanford_related_events_alter_upcoming_page(&$views) {
 
   // Add related content to the exposed filter.
   $page_result = stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'page', TRUE);
-  $upcoming_page_result = stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'upcoming_events_list_page', TRUE);
+  $upcoming_page_result = stanford_related_content_add_exposed_filter($views, 'stanford_events_views', 'upcoming_events_list_page', TRUE, "By Related Content");
 
   return ($page_result || $upcoming_page_result);
 }
