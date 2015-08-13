@@ -48,7 +48,7 @@ Upon installation of the related content feature module, there will be three key
 3. Similarly, Related Content checkboxes are also added to the Stanford Page content type node edit form. When editing a Stanford Page you can select terms that will add related content to the page display of for that node.
 Here are the steps to use Related Content:
 
-##Add terms to the Related Content vocabulary##
+###Add terms to the Related Content vocabulary###
 1. From the *Site Actions* menu, select *Manage Taxonomies*
 2. Select the *Related Content* vocabulary
 3. If the vocabulary terms are there, proceed to the next section otherwise, select *Add*
@@ -56,14 +56,14 @@ Here are the steps to use Related Content:
 5. Scroll down and select *Add* again
 6. When the page refreshes, check that you entered the new terms properly
 
-##Identify your target page for related content##
+###Identify your target page for related content###
 1. Navigate to the page (or select from the *Manage All Content* list) that you wish to have display related content. Your target page must be a “Stanford Page” type node.
 2. Select *Edit*
 3. On the edit form, scroll down until you see *Related Content*
 4. Select one term that you wish to match and aggregate to this page
 5. Scroll to the bottom of the edit form and select *Save*
 
-##Tag your content##
+###Tag your content###
 To tag your content, you will select the same terms on all the pieces of related content.
 
 1. Navigate to the piece of content you would like to include
@@ -72,8 +72,8 @@ To tag your content, you will select the same terms on all the pieces of related
 4. Select all terms that apply to this page
 5. Scroll to the bottom of the edit form and select *Save*
 
-##Check your results##
+###Check your results###
 Navigate to the page on which the content is to display and verify it is now displaying as expected.
 
-##Troubleshooting##
+###Troubleshooting###
 If you're having trouble with having events display, check the dates on those events and make sure that they are upcoming.
