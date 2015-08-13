@@ -37,38 +37,43 @@ You are welcome to contribute functionality, bug fixes, or documentation to this
 
 User Guide
 ---
-The Related Content feature allows you to create relationships between different content and allows this related content to display on a single page.
+The Related Content feature allows you to create relationships between different content and allows this related content to display on a single page.  
 
 In order to understand and create relationships with Related Content, there are a few planning considerations to make. As conceived, Related Content relationships can be presented on any “page” that is created with the “Stanford Page” content type.  This page serves as the one-to-many relationship that presents the aggregated content.  The “many” content comes from other content types - currently, news, events, and people - that will be presented as abbreviated block lists on the presentation page. In order to create the relationship, a vocabulary of “related content” taxonomy terms must be defined and selected in both the target and aggregate content nodes.  
 
 Upon installation of the related content feature module, there will be three key additions that site owners should be aware of:
-A “Related Content” vocabulary taxonomy list is created but requires filling in of terms. These terms will be specific to your site.
-Once the terms are defined, new checkboxes are added to the news, events, and people node edit form allowing you identify content to aggregate by selecting terms from the Related Content vocabulary.
-Similarly, Related Content checkboxes are also added to the Stanford Page content type node edit form. When editing a Stanford Page you can select terms that will add related content to the page display of for that node.
 
-Here are the steps to use Related Content: 
-Add terms to the Related Content vocabulary
-From the Site Actions menu, select Manage Taxonomies
-Select the Related Content vocabulary
-If the vocabulary terms are there, proceed to the next section otherwise, select Add
-Type your terms into the text area, one per line
-Scroll down and select Add again
-When the page refreshes, check that you entered the new terms properly
-Identify your target page for related content
-Navigate to the page (or select from the Manage All Content list) that you wish to have display related content. n.b. Your target page must be a “Stanford Page” type node.
-Select Edit
-On the edit form, scroll down until you see Related Content
-Select one term that you wish to match and aggregate to this page
-Scroll to the bottom of the edit form and select Save
-Tag your content
-To tag your content, you will select the same terms on all the pieces of related content, including the page on which the content will display.
-Navigate to the piece of content you would like to include
-Select Edit
-On the edit form, scroll down until you see Related Content
-Select all terms that apply to this page
-Scroll to the bottom of the edit form and select Save
-Check your results
-Navigate to the Stanford Page on which the content is to display and verify it is now displaying as expected.
-Troubleshooting
+1. A “Related Content” vocabulary taxonomy list is created but requires filling in of terms. These terms will be specific to your site.
+2. Once the terms are defined, new checkboxes are added to the news, events, and person node edit form allowing you identify content to aggregate by selecting terms from the Related Content vocabulary.
+3. Similarly, Related Content checkboxes are also added to the Stanford Page content type node edit form. When editing a Stanford Page you can select terms that will add related content to the page display of for that node.
+Here are the steps to use Related Content:
+
+##Add terms to the Related Content vocabulary##
+1. From the *Site Actions* menu, select *Manage Taxonomies*
+2. Select the *Related Content* vocabulary
+3. If the vocabulary terms are there, proceed to the next section otherwise, select *Add*
+4. Type your terms into the text area, one per line
+5. Scroll down and select *Add* again
+6. When the page refreshes, check that you entered the new terms properly
+
+##Identify your target page for related content##
+1. Navigate to the page (or select from the *Manage All Content* list) that you wish to have display related content. Your target page must be a “Stanford Page” type node.
+2. Select *Edit*
+3. On the edit form, scroll down until you see *Related Content*
+4. Select one term that you wish to match and aggregate to this page
+5. Scroll to the bottom of the edit form and select *Save*
+
+##Tag your content##
+To tag your content, you will select the same terms on all the pieces of related content.
+
+1. Navigate to the piece of content you would like to include
+2. Select *Edit*
+3. On the edit form, scroll down until you see *Related Content*
+4. Select all terms that apply to this page
+5. Scroll to the bottom of the edit form and select *Save*
+
+##Check your results##
+Navigate to the page on which the content is to display and verify it is now displaying as expected.
+
+##Troubleshooting##
 If you're having trouble with having events display, check the dates on those events and make sure that they are upcoming.
-
