@@ -8,9 +8,14 @@ The Related Content feature is a Drupal Features module for displaying aggregate
 
 Sub Modules
 ---
+These modules add functionality needed to make the related content function. For each content type you'd like to include, enable the corresponding module. 
 
-**[TBD](modules/tbd)**
-A content type and collection of default views for aggregating content. 
+[stanford_related_courses](https://github.com/SU-SWS/stanford_related_content/tree/7.x-1.x/modules/stanford_related_courses)
+[stanford_related_events](https://github.com/SU-SWS/stanford_related_content/tree/7.x-1.x/modules/stanford_related_events)
+[stanford_related_news](https://github.com/SU-SWS/stanford_related_content/tree/7.x-1.x/modules/stanford_related_news)
+[stanford_related_page](https://github.com/SU-SWS/stanford_related_content/tree/7.x-1.x/modules/stanford_related_page)
+[stanford_related_person](https://github.com/SU-SWS/stanford_related_content/tree/7.x-1.x/modules/stanford_related_person)
+[stanford_related_publication](https://github.com/SU-SWS/stanford_related_content/tree/7.x-1.x/modules/stanford_related_publication)
 
 
 Installation
