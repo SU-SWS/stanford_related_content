@@ -37,7 +37,7 @@ You are welcome to contribute functionality, bug fixes, or documentation to this
 
 User Guide
 ---
-> The Related Content feature allows you to create relationships between different content and allows this related content to display on a single page.  
+The Related Content feature allows you to create relationships between different content and allows this related content to display on a single page.  
 
 In order to understand and create relationships with Related Content, there are a few planning considerations to make. As conceived, Related Content relationships can be presented on any “page” that is created with the “Stanford Page” content type.  This page serves as the one-to-many relationship that presents the aggregated content.  The “many” content comes from other content types - currently, news, events, and people - that will be presented as abbreviated block lists on the presentation page. In order to create the relationship, a vocabulary of “related content” taxonomy terms must be defined and selected in both the target and aggregate content nodes.  
 
