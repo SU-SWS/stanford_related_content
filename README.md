@@ -4,8 +4,7 @@
 Maintainers: [cjwest](https://github.com/cjwest)
 [Changelog.txt](CHANGELOG.txt)
 
-Drupal Features module for displaying aggregated content. Contains a taxonomy, Related Content; and a term reference field to be added to an entity.
-
+The Related Content feature is a Drupal Features module for displaying aggregated content and allows you to create relationships between different content and can display this related contenton a single page. Contains a taxonomy, Related Content; and a term reference field to be added to an entity.
 
 Sub Modules
 ---
@@ -22,24 +21,9 @@ Install this module like any other module. [See Drupal Documentation](https://dr
 Configuration
 ---
 
-Steps neede to configure include:
-Create terms for the Related Content taxonomy,
-
-Troubleshooting
----
-
-If you are experiencing issues with this module try reverting the feature first. If you are still experiencing issues try posting an issue on the GitHub issues page.
-
-Contribution / Collaboration
----
-
-You are welcome to contribute functionality, bug fixes, or documentation to this module. If you would like to suggest a fix or new functionality you may add a new issue to the GitHub issue queue or you may fork this repository and submit a pull request. For more help please see [GitHub's article on fork, branch, and pull requests](https://help.github.com/articles/using-pull-requests)
-
-User Guide
----
-The Related Content feature allows you to create relationships between different content and allows this related content to display on a single page.  
-
 In order to understand and create relationships with Related Content, there are a few planning considerations to make. As conceived, Related Content relationships can be presented on any “page” that is created with the “Stanford Page” content type.  This page serves as the one-to-many relationship that presents the aggregated content.  The “many” content comes from other content types - currently, news, events, and people - that will be presented as abbreviated block lists on the presentation page. In order to create the relationship, a vocabulary of “related content” taxonomy terms must be defined and selected in both the target and aggregate content nodes.  
+
+
 
 Upon installation of the related content feature module, there will be three key additions that site owners should be aware of:
 
@@ -75,5 +59,15 @@ To tag your content, you will select the same terms on all the pieces of related
 ###Check your results###
 Navigate to the page on which the content is to display and verify it is now displaying as expected.
 
-###Troubleshooting###
+Troubleshooting
+---
 If you're having trouble with having events display, check the dates on those events and make sure that they are upcoming.
+
+If you are experiencing issues with this module try reverting the feature first. If you are still experiencing issues try posting an issue on the GitHub issues page.
+
+Contribution / Collaboration
+---
+
+You are welcome to contribute functionality, bug fixes, or documentation to this module. If you would like to suggest a fix or new functionality you may add a new issue to the GitHub issue queue or you may fork this repository and submit a pull request. For more help please see [GitHub's article on fork, branch, and pull requests](https://help.github.com/articles/using-pull-requests)
+
+
