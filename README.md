@@ -4,7 +4,7 @@
 Maintainers: [cjwest](https://github.com/cjwest)
 [Changelog.txt](CHANGELOG.txt)
 
-The Related Content feature is a Drupal Features module for displaying aggregated content and allows you to create relationships between different content and can display this related contenton a single page. Contains a taxonomy, Related Content; and a term reference field to be added to an entity.
+The Related Content feature is a Drupal Features module for displaying aggregated content. It allows you to create relationships between different content and can display this related content on a single page. Contains a taxonomy, Related Content; and a term reference field to be added to an entity.
 
 Sub Modules
 ---
