@@ -20,6 +20,7 @@ These modules add functionality needed to make the related content function. For
 
 Installation
 ---
+
 When enabling the submodules (listed above) check that the dependencies are met, since each submodule depends on one or more other Stanford feature modules. To install stanford_related_person, for example:
 # Install this module like any other module. [See Drupal Documentation](https://drupal.org/documentation/install/modules-themes/modules-7)
 # Install and enable [stanford_person](https://github.com/SU-SWS/stanford_person/tree/7.x-5.x-dev) along with the submodule [stanford_person_grid_view](https://github.com/SU-SWS/stanford_person/tree/5.x-grid-view/modules/stanford_person_views)
