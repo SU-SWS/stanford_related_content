@@ -1,6 +1,6 @@
-Stanford Related Content x.x-x.x, xxxx-xx-xx
+Stanford Related News x.x-x.x, xxxx-xx-xx
 ------------------------------------
 
-Stanford Related Content 7.x-1.0-alpha, 2015-05-06
+Stanford Related News 7.x-1.0-alpha, 2015-10-15
 ------------------------------------
 - Initial Version Release.
