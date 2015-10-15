@@ -1,11 +1,11 @@
-#[Stanford Related News](https://github.com/SU-SWS/stanford_related_content/tree/7.x-1.x/modules/stanford_related_news)
-##### Version: 7.x-1.0-alpha
+#[Stanford Related Events](https://github.com/SU-SWS/stanford_related_content/tree/7.x-1.x/modules/stanford_related_news)
+##### Version: 7.x-1.0
 
 Maintainers: [cynmij](https://github.com/cynmij), [cjwest](https://github.com/cjwest),
 [Changelog.txt](CHANGELOG.txt)
 
-This feature works with the Related Content feature to create relationships between news and other content.
-Once the relationship is defined with a page for example, related news will display on the related page.
+This feature works with the Related Content feature to create relationships between events and other content.
+Once the relationship is defined with a page for example, related events will display on the related page.
 
 Installation
 ---
