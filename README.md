@@ -1,5 +1,5 @@
 #[Stanford Related Content](https://github.com/SU-SWS/stanford_related_content)
-##### Version: 7.x-1.0-alpha
+##### Version: 7.x-1.0-alpha1
 
 Maintainers: [cjwest](https://github.com/cjwest)
 [Changelog.txt](CHANGELOG.txt)
@@ -8,7 +8,7 @@ The Related Content feature is a Drupal Features module for displaying aggregate
 
 Sub Modules
 ---
-These modules add functionality needed to make the related content function. For each content type you'd like to include, enable the corresponding module. 
+These modules add functionality needed to make the related content function. For each content type you'd like to include, enable the corresponding module.
 
 * [stanford_related_courses](https://github.com/SU-SWS/stanford_related_content/tree/7.x-1.x/modules/stanford_related_courses)
 - [stanford_related_events](https://github.com/SU-SWS/stanford_related_content/tree/7.x-1.x/modules/stanford_related_events)
@@ -24,13 +24,13 @@ When enabling the submodules (listed above) check that the dependencies are met,
 
 1. Install this module like any other module. [See Drupal Documentation](https://drupal.org/documentation/install/modules-themes/modules-7)
 2. Install and enable [Stanford Person](https://github.com/SU-SWS/stanford_person/tree/7.x-5.x-dev) along with the submodule [Stanford Person Grid View](https://github.com/SU-SWS/stanford_person/tree/5.x-grid-view/modules/stanford_person_grid_view)
-3. Enable [Stanford Related Content](https://github.com/SU-SWS/stanford_related_content) and [Stanford Related Person](https://github.com/SU-SWS/stanford_related_content/tree/7.x-1.x/modules/stanford_related_person) 
+3. Enable [Stanford Related Content](https://github.com/SU-SWS/stanford_related_content) and [Stanford Related Person](https://github.com/SU-SWS/stanford_related_content/tree/7.x-1.x/modules/stanford_related_person)
 
 
 Configuration
 ---
 
-In order to understand and create relationships with Related Content, there are a few planning considerations to make. As conceived, Related Content relationships can be presented on any “page” that is created with the “Stanford Page” content type.  This page serves as the one-to-many relationship that presents the aggregated content.  The “many” content comes from other content types - currently, news, events, and people - that will be presented as abbreviated block lists on the presentation page. In order to create the relationship, a vocabulary of “related content” taxonomy terms must be defined and selected in both the target and aggregate content nodes.  
+In order to understand and create relationships with Related Content, there are a few planning considerations to make. As conceived, Related Content relationships can be presented on any “page” that is created with the “Stanford Page” content type.  This page serves as the one-to-many relationship that presents the aggregated content.  The “many” content comes from other content types - currently, news, events, and people - that will be presented as abbreviated block lists on the presentation page. In order to create the relationship, a vocabulary of “related content” taxonomy terms must be defined and selected in both the target and aggregate content nodes.
 
 
 
