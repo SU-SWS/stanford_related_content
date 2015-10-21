@@ -1,0 +1,6 @@
+Stanford Related Events x.x-x.x, xxxx-xx-xx
+------------------------------------
+
+Stanford Related Events 7.x-1.0, 2015-10-15
+------------------------------------
+- Initial Version Release.
