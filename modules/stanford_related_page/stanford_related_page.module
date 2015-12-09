@@ -35,8 +35,10 @@ function stanford_related_page_alter_manage_page(&$views) {
     $handler = $view->display_handler;
   }
   else {
-    watchdog('stanford_related_page', "Display %display_name not available in view %view_name.",
-      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_NOTICE);
+    if (varable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_page', "Display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
     return FALSE;
   }
 

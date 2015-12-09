@@ -33,8 +33,10 @@ function stanford_related_news_alter_manage_news(&$views) {
     $handler = $view->display_handler;
   }
   else {
-    watchdog('stanford_related_news', "Display %display_name not available in view %view_name.",
-      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_NOTICE);
+    if (varable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_news', "Display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
     return FALSE;
   }
 
@@ -104,8 +106,10 @@ function stanford_related_news_alter_3_item_block(&$views) {
   }
 
   if ($page_handler == null) {
-    watchdog('stanford_related_news', "Display not available in view %view_name.",
+    if (varable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_news', "Display not available in view %view_name.",
       array('%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
     return FALSE;
   }
   $page_path = $page_handler->get_option('path');
@@ -122,8 +126,10 @@ function stanford_related_news_alter_3_item_block(&$views) {
 
   // Check that the view still works after we altered it!
   if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_news')) {
-    watchdog('stanford_related_news', "Block 'filtered_3_news_block' added to view %view_name.",
+    if (varable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_news', "Block 'filtered_3_news_block' added to view %view_name.",
       array('%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
     return TRUE;
   }
   return FALSE;
