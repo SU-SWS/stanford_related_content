@@ -126,7 +126,7 @@ function stanford_related_events_alter_upcoming_block(&$views) {
 
   // Check that the view still works after we altered it!
   if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_events')) {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_events', "Block 'filtered_upcoming_block' added to view %view_name.",
       array('%view_name' => $view_name), WATCHDOG_DEBUG);
     }
