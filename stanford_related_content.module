@@ -80,7 +80,7 @@ function stanford_related_content_validate_view($view, $name = 'stanford_related
     return TRUE;
   }
   else {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog($name, "Could not validate view: %name (%title).",
       array('%name' => $view->name,
         '%title' => $view->get_title()),
@@ -110,7 +110,7 @@ function stanford_related_content_add_exposed_filter($views, $view_name, $displa
     $view = $views[$view_name];
   }
   else {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_content', "View %view_name not available.",
       array('%view_name' => $view_name), WATCHDOG_DEBUG);
     }
@@ -121,7 +121,7 @@ function stanford_related_content_add_exposed_filter($views, $view_name, $displa
     $handler = $view->display_handler;
   }
   else {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_content', "Display %display_name not available in view %view_name.",
       array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
     }
@@ -158,7 +158,7 @@ function stanford_related_content_add_exposed_filter($views, $view_name, $displa
 
   // Check that the view still works after we altered it!
   if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_content')) {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_content', "Filter 'stanford_related_content' added to display %display_name on view %view_name.",
       array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
     }
@@ -184,7 +184,7 @@ function stanford_related_content_add_vbo($views, $view_name, $display_name = 'p
     $view = $views[$view_name];
   }
   else {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_content', "View %view_name not available.",
       array('%view_name' => $view_name), WATCHDOG_DEBUG);
     }
@@ -195,7 +195,7 @@ function stanford_related_content_add_vbo($views, $view_name, $display_name = 'p
     $handler = $view->display_handler;
   }
   else {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_content', "Display %display_name not available in view %view_name.",
       array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
     }
@@ -241,7 +241,7 @@ function stanford_related_content_add_vbo($views, $view_name, $display_name = 'p
 
   // Check that the view still works after we altered it!
   if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_content')) {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_content', "Filter 'stanford_related_content' added to display %display_name on view %view_name.",
       array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
     }
@@ -268,7 +268,7 @@ function stanford_related_content_copy_display($views, $view_name, $display_name
     $view = $views[$view_name];
   }
   else {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_content', "View '%view_name' not available.",
       array('%view_name' => $view_name), WATCHDOG_DEBUG);
     }
@@ -279,7 +279,7 @@ function stanford_related_content_copy_display($views, $view_name, $display_name
     $display_orig = $view->display_handler;
   }
   else {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_content', "Display %display_name not available in view %view_name.",
       array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
     }
@@ -297,7 +297,7 @@ function stanford_related_content_copy_display($views, $view_name, $display_name
     $options_orig = $display_orig->display->display_options;
   }
   else {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_content', "Display options for display %display_name not available in view %view_name.",
       array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
     }
@@ -435,7 +435,7 @@ function stanford_related_content_insert_item($view, $display_id, $type, $table,
                                                 $after_field = NULL) {
 
   if (!$view->set_display($display_id)) {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_content', "Display %display_id not available in view %view_name.",
       array('%display_id' => $display_id, '%view_name' => $view->name), WATCHDOG_DEBUG);
     }
@@ -505,7 +505,7 @@ function stanford_related_content_remove_display(&$views, $view_name, $display_n
     if (stanford_related_content_validate_view($view, $module_name)) {
       $view->save();
       views_flush_caches();
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+      if (variable_get("stanford_related_debug_mode", FALSE)) {
         watchdog($module_name, "Display %display_name removed from view %view_name.",
         array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
       }
@@ -540,7 +540,7 @@ function stanford_related_content_remove_filter(&$views, $view_name, $display_na
       // Check that the view still works after we altered it!
       if (stanford_related_content_validate_view($views[$view_name], $module_name)) {
         $view->save();
-        if (varable_get("stanford_related_debug_mode", FALSE)) {
+        if (variable_get("stanford_related_debug_mode", FALSE)) {
           watchdog($module_name, "Filter %filter_name removed from view %view_name.",
           array('%filter_name' => $filter_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
         }

@@ -30,7 +30,7 @@ function stanford_related_person_alter_manage_person(&$views) {
     $handler = $view->display_handler;
   }
   else {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_person', "Display %display_name not available in view %view_name.",
       array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
     }
@@ -70,7 +70,7 @@ function stanford_related_person_alter_block(&$views) {
     $view = $views[$view_name];
   }
   else {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_person', "View '%name' not available.",
       array('%name' => $view_name), WATCHDOG_DEBUG);
     }
@@ -114,7 +114,7 @@ function stanford_related_person_alter_block(&$views) {
 
   // Check that the view still works after we altered it!
   if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_person')) {
-    if (varable_get("stanford_related_debug_mode", FALSE)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_person', "Block %display_name added to view %view_name.",
       array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
     }
