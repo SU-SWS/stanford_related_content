@@ -505,7 +505,7 @@ function stanford_related_content_remove_display(&$views, $view_name, $display_n
     if (stanford_related_content_validate_view($view, $module_name)) {
       $view->save();
       views_flush_caches();
-    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      if (variable_get("stanford_related_debug_mode", FALSE)) {
         watchdog($module_name, "Display %display_name removed from view %view_name.",
         array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
       }
