@@ -80,7 +80,7 @@ function stanford_related_content_validate_view($view, $name = 'stanford_related
     return TRUE;
   }
   else {
-    if (variable_get("stanford_related_debug_mode", FALSE)) {
+    if (varable_get("stanford_related_debug_mode", FALSE)) {
       watchdog($name, "Could not validate view: %name (%title).",
       array('%name' => $view->name,
         '%title' => $view->get_title()),
