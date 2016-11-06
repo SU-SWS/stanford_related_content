@@ -7,7 +7,8 @@
  * Implements hook_views_default_views_alter().
  */
 function stanford_related_news_views_default_views_alter(&$views) {
-  // What does this do? Needs comment here...
+
+  // Add related content.
   stanford_related_news_alter_3_item_block($views);
   stanford_related_news_alter_page($views);
   stanford_related_news_alter_manage_news($views);
