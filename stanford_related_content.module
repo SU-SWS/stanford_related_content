@@ -631,7 +631,7 @@ function stanford_related_content_create_block(&$views, $view_name, $source_bloc
 
   // Copy the block display.
   $handler = stanford_related_content_copy_display($views, $view_name, $source_block_name,
-    $dest_block['display_title'], $dest_block['display_id']);
+    $dest_block['display_title'], $dest_block['display_name']);
 
   if ($handler == FALSE) {
     return FALSE;
@@ -652,7 +652,7 @@ function stanford_related_content_create_block(&$views, $view_name, $source_bloc
      if (variable_get("stanford_related_debug_mode", FALSE)) {
        watchdog('stanford_related_content', 'Unsuccessful in adding %block to %view_name',
          array(
-           '%block' => $dest_block['display_id'],
+           '%block' => $dest_block['display_name'],
            '%view_name' => $view_name
          ),
          WATCHDOG_DEBUG);
