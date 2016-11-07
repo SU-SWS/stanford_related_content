@@ -40,7 +40,9 @@ function stanford_related_news_uninstall() {
   // Remove related content
   stanford_related_content_remove_display($views, 'stanford_news', 'filtered_3_news_block', 'stanford_related_news');
   stanford_related_content_remove_display($views, 'stanford_news_image_title', 'filtered_three_block', 'stanford_related_news');
+
   stanford_related_content_remove_filter($views, 'stanford_news', 'page_1', 'stanford_related_news');
+  stanford_related_content_remove_filter($views, 'stanford_news_with_teaser', 'page_1', 'stanford_related_news');
   stanford_related_content_remove_filter($views, 'stanford_news', 'recent_news_page_2', 'stanford_related_news');
   /* TODO
   stanford_related_news_uninstall_manage_news($views);

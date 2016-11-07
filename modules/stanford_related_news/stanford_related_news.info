@@ -6,6 +6,7 @@ version = 7.x-1.0-alpha
 project = stanford_related_news
 dependencies[] = features
 dependencies[] = options
+dependencies[] = stanford_news
 dependencies[] = stanford_related_content
 dependencies[] = taxonomy
 features[features_api][] = api:2
