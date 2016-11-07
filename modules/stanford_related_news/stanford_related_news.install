@@ -44,7 +44,7 @@ function stanford_related_news_install() {
 function stanford_related_news_uninstall() {
   $views = view::load_views();
 
-  // Remove related content
+  // Remove related content.
   stanford_related_content_remove_display($views, 'stanford_news', 'filtered_3_news_block', 'stanford_related_news');
   stanford_related_content_remove_display($views, 'stanford_news_image_title', 'filtered_three_block', 'stanford_related_news');
 
