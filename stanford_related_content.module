@@ -556,10 +556,10 @@ function stanford_related_content_remove_filter(&$views, $view_name, $display_na
  * Given a page within a views display, return its path.
  *
  * @param array $views
- *   array of views.
+ *   Array of views.
  * @param string $view_name
  *   Machine name of the view, e.g. 'stanford_news'.
- * @param string $page_name.
+ * @param string $page_name
  *   Machine name of the page e.g 'page_1'.
  *
  * @return bool
@@ -605,14 +605,14 @@ function stanford_related_content_get_views_display_path(&$views, $view_name, $p
  * Copy the block display in the view, add contextual filter, and more link.
  *
  * @param array $views
- *   array of views.
+ *   Array of views.
  * @param string $view_name
  *   Machine name of the view, e.g. 'stanford_news'.
  * @param string $source_block_name
  *   Machine name of the page e.g 'block_1'.
  * @param array $dest_block
  *   Attributes and values for the new block.
- * @param $page_path
+ * @param string $page_path
  *   If there's a more link, what is its path.
  *
  * @return bool

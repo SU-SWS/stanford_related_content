@@ -168,6 +168,7 @@ function stanford_related_news_alter_page(&$views) {
 }
 
 /**
+ * Create the related news block.
  *
  * Copy the block display in the stanford_news_with_teaser and
  * add contextual filter.
