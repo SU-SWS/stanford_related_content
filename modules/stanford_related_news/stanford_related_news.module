@@ -7,9 +7,17 @@
  * Implements hook_views_default_views_alter().
  */
 function stanford_related_news_views_default_views_alter(&$views) {
-  // What does this do? Needs comment here...
-  stanford_related_news_alter_3_item_block($views);
-  stanford_related_news_alter_page($views);
+
+  // Add related content for News Extras view.
+  if (stanford_related_news_alter_image_title_block($views)) {
+    stanford_related_content_add_exposed_filter($views, 'stanford_news_with_teaser',
+      'page_1', TRUE);
+  }
+
+  // Add related content for News view.
+  elseif (stanford_related_news_alter_3_item_block($views)) {
+    stanford_related_news_alter_page($views);
+  }
   stanford_related_news_alter_manage_news($views);
 }
 
@@ -68,7 +76,15 @@ function stanford_related_news_views_pre_build(&$view) {
   if ($view->name == "stanford_news"){
     if ($view->current_display == "filtered_3_news_block")  {
       $subject = $view->footer["area"]->options["content"];
-      $view->footer["area"]->options["content"] = stanford_related_content_add_more_link($subject, "See more related news");
+      $view->footer["area"]->options["content"]
+        = stanford_related_content_add_more_link($subject, "See more related news");
+    }
+  }
+  if ($view->name == "stanford_news_image_title") {
+    if ($view->current_display == "filtered_three_block") {
+      $subject = $view->footer["area"]->options["content"];
+      $view->footer["area"]->options["content"]
+        = stanford_related_content_add_more_link($subject, "See more related news");
     }
   }
 }
@@ -149,4 +165,29 @@ function stanford_related_news_alter_page(&$views) {
   $soe_page_result = stanford_related_content_add_exposed_filter($views, 'stanford_news', 'recent_news_page_2', TRUE);
 
   return ($page_result || $soe_page_result);
+}
+
+/**
+ * Create the related news block.
+ *
+ * Copy the block display in the stanford_news_with_teaser and
+ * add contextual filter.
+ *
+ * @param object $views
+ *   Array of views.
+ *
+ * @return bool
+ *   Returns true if successful.
+ */
+function stanford_related_news_alter_image_title_block($views) {
+  $page_path = stanford_related_content_get_views_display_path($views, 'stanford_news_with_teaser', 'page_1');
+
+  $dest_block = array(
+    'title' => 'Related News',
+    'display_title' => 'Filtered three item block',
+    'display_name' => 'filtered_three_block',
+  );
+
+  return stanford_related_content_create_block($views, 'stanford_news_image_title',
+    'three_block', $dest_block, $page_path);
 }
