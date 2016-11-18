@@ -17,19 +17,20 @@ function stanford_related_news_views_default_views_alter(&$views) {
       TRUE);
   }
 
-  // Add related content for three item News view.
-  elseif (stanford_related_news_alter_3_item_block($views)) {
-    stanford_related_news_alter_page($views);
-  }
-
   // Add related content for 2 item News Extras view.
-  elseif (stanford_related_news_alter_image_title_2_item_block($views)){
+  if (stanford_related_news_alter_image_title_2_item_block($views)){
     stanford_related_content_add_exposed_filter(
       $views,
       'stanford_news_with_teaser',
       'page_1',
       TRUE);
   }
+
+  // Add related content for three item News view.
+  if (stanford_related_news_alter_3_item_block($views)) {
+    stanford_related_news_alter_page($views);
+  }
+
   stanford_related_news_alter_manage_news($views);
 }
 
@@ -121,8 +122,10 @@ function stanford_related_news_alter_3_item_block(&$views) {
     $view = $views[$view_name];
   }
   else {
-    watchdog('stanford_related_news', "View '%name' not available.",
-      array('%name' => $view_name), WATCHDOG_DEBUG);
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_news', "View '%name' not available.",
+        array('%name' => $view_name), WATCHDOG_DEBUG);
+    }
     return FALSE;
   }
 
@@ -189,7 +192,7 @@ function stanford_related_news_alter_page(&$views) {
 /**
  * Create the related news block.
  *
- * Copy the block display in the stanford_news_with_teaser and
+ * Copy the block display in the stanford_news_with_title and
  * add contextual filter.
  *
  * @param object $views
@@ -210,14 +213,18 @@ function stanford_related_news_alter_image_title_3_item_block ($views) {
     'display_name' => 'filtered_three_block',
   );
 
-  return stanford_related_content_create_block($views, 'stanford_news_image_title',
-    'three_block', $dest_block, $page_path);
+  return stanford_related_content_create_block(
+    $views,
+    'stanford_news_image_title',
+    'three_block',
+    $dest_block,
+    $page_path);
 }
 
 /**
  * Create the related news two item block.
  *
- * Copy the block display in the stanford_news_with_teaser and
+ * Copy the block display in the stanford_news_with_title and
  * add contextual filter.
  *
  * @param object $views
@@ -238,6 +245,10 @@ function stanford_related_news_alter_image_title_2_item_block($views) {
     'display_name' => 'filtered_two_block',
   );
 
-  return stanford_related_content_create_block($views, 'stanford_news_image_title',
-    'two_block', $dest_block, $page_path);
+  return stanford_related_content_create_block(
+    $views,
+    'stanford_news_image_title',
+    'two_block',
+    $dest_block,
+    $page_path);
 }

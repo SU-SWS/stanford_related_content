@@ -570,8 +570,10 @@ function stanford_related_content_get_views_display_path(&$views, $view_name, $p
     $view = $views[$view_name];
   }
   else {
-    watchdog('stanford_related_content', "View '%name' not available.",
-      array('%name' => $view_name), WATCHDOG_DEBUG);
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', "View '%name' not available.",
+        array('%name' => $view_name), WATCHDOG_DEBUG);
+    }
     return FALSE;
   }
 
@@ -628,8 +630,10 @@ function stanford_related_content_create_block(&$views,
     $view = $views[$view_name];
   }
   else {
-    watchdog('stanford_related_content', "View '%name' not available.",
-      array('%name' => $view_name), WATCHDOG_DEBUG);
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', "View '%name' not available.",
+        array('%name' => $view_name), WATCHDOG_DEBUG);
+    }
     return FALSE;
   }
 
