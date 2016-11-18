@@ -18,7 +18,7 @@ function stanford_related_news_views_default_views_alter(&$views) {
   }
 
   // Add related content for 2 item News Extras view.
-  if (stanford_related_news_alter_image_title_2_item_block($views)){
+  if (stanford_related_news_alter_image_title_2_item_block($views)) {
     stanford_related_content_add_exposed_filter(
       $views,
       'stanford_news_with_teaser',
@@ -201,7 +201,7 @@ function stanford_related_news_alter_page(&$views) {
  * @return bool
  *   Returns true if successful.
  */
-function stanford_related_news_alter_image_title_3_item_block ($views) {
+function stanford_related_news_alter_image_title_3_item_block($views) {
   $page_path = stanford_related_content_get_views_display_path(
     $views,
     'stanford_news_with_teaser',
