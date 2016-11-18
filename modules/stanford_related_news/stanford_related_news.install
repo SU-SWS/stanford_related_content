@@ -29,9 +29,18 @@ function stanford_related_news_install() {
     $views[$name]->save();
   }
 
+  // Add related content for News Extras views three item block.
   $name = 'stanford_news_image_title';
   if (array_key_exists($name, $views)) {
-    if (stanford_related_news_alter_image_title_block($views)) {
+    if (stanford_related_news_alter_image_title_3_item_block ($views)) {
+      $views[$name]->save();
+    }
+  }
+
+  // Add related content for News Extras views two item block.
+  $name = 'stanford_news_image_title';
+  if (array_key_exists($name, $views)) {
+    if (stanford_related_news_alter_image_title_2_item_block ($views)) {
       $views[$name]->save();
     }
   }
