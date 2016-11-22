@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Common functions (utilities) for related content
+ * Common functions (utilities) for related content.
  *
  */
 
@@ -14,14 +14,14 @@
  * 2) a link built with the url in the subject plus the taxonomy terms.
  *
  * @param string $subject
- *  subject with pattern to match.
+ *   Subject with pattern to match.
  * @param string $link_text
- *   text to display.
+ *   Text to display.
  * @param string $pattern
- *   pattern to replace.
+ *   Pattern to replace.
  *
  * @return string
- *   updated URL.
+ *   Updated URL.
  */
 function stanford_related_content_add_more_link($subject, $link_text = "See more", $pattern = "/\[hook_views_pre_build:.*\]/") {
 
@@ -84,7 +84,7 @@ function stanford_related_content_build_tax_args() {
  *   The name of the module.
  *
  * @return bool
- *   success or failure.
+ *   Success or failure.
  */
 function stanford_related_content_validate_view($view, $name = 'stanford_related_content') {
 
@@ -97,7 +97,7 @@ function stanford_related_content_validate_view($view, $name = 'stanford_related
       array(
         '%name' => $view->name,
         '%title' => $view->get_title(),
-        ),
+      ),
       WATCHDOG_DEBUG);
     }
     return FALSE;
@@ -274,16 +274,16 @@ function stanford_related_content_add_vbo($views, $view_name, $display_name = 'p
 /**
  * Return the handler to a copy of a display.
  *
- * @param  array  $views
- *   array of views.
- * @param  string $view_name
- *   name of view to copy.
- * @param  string $display_name
- *   name of display to copy.
- * @param  string $new_title
- *   title of new display.
- * @param  string $new_id
- *   id for new display.
+ * @param array $views
+ *   Array of views.
+ * @param string $view_name
+ *   Name of view to copy.
+ * @param string $display_name
+ *   Name of display to copy.
+ * @param string $new_title
+ *   Title of new display.
+ * @param string $new_id
+ *   Id for new display.
  *
  * @return object
  *   Display handler or false.
@@ -383,12 +383,12 @@ function stanford_related_content_add_contextual_filter($display_handler, $title
  * Adds a more link to footer of the given display.
  *
  * @param object $display_handler
- *   display handler to update.
+ *   Display handler to update.
  * @param string $url
- *   url for the more link.
+ *   Url for the more link.
  *
  * @return object
- *   updated display handler.
+ *   Updated display handler.
  */
 function stanford_related_content_add_footer_more_link($display_handler, $url) {
 
@@ -448,12 +448,12 @@ function stanford_related_content_insert_related_content(&$view, &$display_id, $
  *   Display to be altered.
  * @param string $type
  *   Type of item to be altered.
- * @param string $table.
+ * @param string $table
  *   Table name of the item to be inserted.
  * @param string $field
  *   Name of the item to be inserted.
  * @param array $options
- *   options to be included when inserting the item.
+ *   Options to be included when inserting the item.
  * @param string $after_field
  *   Name of field to insert after, if it is 0, it is inserted first.
  *
@@ -696,3 +696,4 @@ function stanford_related_content_create_block(&$views,
     return FALSE;
   }
 }
+
