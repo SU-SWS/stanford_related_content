@@ -1,9 +1,10 @@
 #[Stanford Related Person](https://github.com/SU-SWS/stanford_related_content/tree/7.x-1.x/modules/stanford_related_person)
-##### Version: 7.x-1.0-alpha
+##### Version: 7.x-1.0
 
 Maintainers: [cynmij](https://github.com/cynmij), [cjwest](https://github.com/cjwest),
 [Changelog.txt](CHANGELOG.txt)
 
+*under development*
 This feature works with the Related Content feature to create relationships between people and other content.
 Once the relationship is defined with a page for example, related people will display on the related page.
 

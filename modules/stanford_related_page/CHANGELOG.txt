@@ -1,6 +1,0 @@
-Stanford Related Page x.x-x.x, xxxx-xx-xx
-------------------------------------
-
-Stanford Related Page 7.x-1.0, 2015-10-15
-------------------------------------
-- Initial Version Release.

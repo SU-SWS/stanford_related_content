@@ -1,9 +1,10 @@
 #[Stanford Related Courses](https://github.com/SU-SWS/stanford_related_content/tree/7.x-1.x/modules/stanford_related_courses)
-##### Version: 7.x-1.0-alpha
+##### Version: 7.x-1.0
 
 Maintainers: [cynmij](https://github.com/cynmij), [cjwest](https://github.com/cjwest),
 [Changelog.txt](CHANGELOG.txt)
 
+*Under Development*
 The Related Courses feature works with the Related Content feature to create relationships between courses and other content.
 Once the relationship is defined with a page for example, related courses will display on that related page.
 
