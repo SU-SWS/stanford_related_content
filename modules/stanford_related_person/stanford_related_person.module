@@ -7,6 +7,8 @@
  */
 function stanford_related_person_views_default_views_alter(&$views) {
   stanford_related_person_alter_four_grid_block($views);
+  stanford_related_person_alter_five_grid_block($views);
+  stanford_related_person_alter_six_grid_block($views);
   //stanford_related_person_alter_page($views);
   stanford_related_person_alter_manage_person($views);
 }
