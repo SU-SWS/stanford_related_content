@@ -108,7 +108,7 @@ function stanford_related_person_alter_four_grid_block(&$views) {
     return FALSE;
   }
 
-  // Add contextual filter and more link
+  // Add contextual filter and more link.
   $handler = stanford_related_content_add_contextual_filter($handler, 'Related People');
   /* TODO: If we link to a page
   $handler = stanford_related_content_add_footer_more_link($handler, $page_path);
@@ -126,7 +126,7 @@ function stanford_related_person_alter_four_grid_block(&$views) {
 }
 
 /**
- * Copy the block display in the stanford_grid_five_block
+ * Copy the block display in the stanford_grid_five_block.
  *
  * @param object $views
  *   Array of views.
@@ -146,7 +146,7 @@ function stanford_related_person_alter_five_grid_block(&$views) {
 }
 
 /**
- * Copy the block display in the stanford_grid_five_block
+ * Copy the block display in the stanford_grid_six_block.
  *
  * @param object $views
  *   Array of views.
