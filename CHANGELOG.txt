@@ -1,6 +1,10 @@
 Stanford Related Content x.x-x.x, xxxx-xx-xx
 ------------------------------------
 
+Stanford Related Content 7.x-1.0+6-dev, 2016-12-14
+------------------------------------
+- SOE-1524: Adding views_grid_five and views_grid_six
+
 Stanford Related Content 7.x-1.0, 2016-11-29
 ------------------------------------
 - Refactored code to allow for re-use
