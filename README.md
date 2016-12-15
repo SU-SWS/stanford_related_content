@@ -1,5 +1,5 @@
 #[Stanford Related Content](https://github.com/SU-SWS/stanford_related_content)
-##### Version: 7.x-1.0+6-dev
+##### Version: 7.x-1.0-dev
 
 Maintainers: [cjwest](https://github.com/cjwest)
 [Changelog.txt](CHANGELOG.txt)
