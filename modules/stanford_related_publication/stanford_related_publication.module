@@ -9,8 +9,8 @@
  * Implements hook_views_default_views_alter().
  */
 function stanford_related_publication_views_default_views_alter(&$views) {
-  //stanford_related_publication_alter_block($views);
-  //stanford_related_publication_alter_page($views);
+  // stanford_related_publication_alter_block($views);
+  // stanford_related_publication_alter_page($views);
   stanford_related_publication_alter_manage_publication($views);
 }
 
@@ -59,9 +59,9 @@ function stanford_related_publication_views_pre_view(&$view,
                                                      &$display_id,
                                                      &$args) {
 
-  // Insert the related content field after the location field
+  // Insert the related content field after the location field.
   if ($view->name == 'publication_manage' && $view->current_display == "page") {
-    stanford_related_content_insert_related_content ($view, $display_id,
+    stanford_related_content_insert_related_content($view, $display_id,
       'field_s_pub_type');
   }
 }
