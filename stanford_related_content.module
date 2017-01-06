@@ -426,8 +426,12 @@ function stanford_related_content_add_footer_more_link($display_handler, $url) {
  *   View to be altered.
  * @param string $display_id
  *   Display to be altered.
+ * @param string $after_field
+ *   Field after which the related content should be added.
  */
-function stanford_related_content_insert_related_content(&$view, &$display_id, $after_field) {
+function stanford_related_content_insert_related_content(&$view,
+                                                         &$display_id,
+                                                         $after_field) {
 
   $options['field_s_related_content']['id'] = 'field';
   $options['field_s_related_content']['table'] = 'field_data_field_s_related_content';

@@ -1,19 +1,23 @@
 <?php
+
 /**
  * @file
+ * Code for the Stanford Courses feature.
  */
+
 /**
  * Implements hook_views_default_views_alter().
  */
 function stanford_related_courses_views_default_views_alter(&$views) {
-  //stanford_related_courses_alter_block($views);
-  //stanford_related_courses_alter_page($views);
+  // stanford_related_courses_alter_block($views);
+  // stanford_related_courses_alter_page($views);
   stanford_related_courses_alter_manage_courses($views);
 }
+
 /**
  * Add exposed filter for related content to the page display.
  *
- * @param object $views
+ * @param array $views
  *   Array of views.
  */
 function stanford_related_courses_alter_manage_courses(&$views) {
@@ -45,9 +49,8 @@ function stanford_related_courses_alter_manage_courses(&$views) {
 }
 
 /**
- * Implementation of hook_views_pre_view().
+ * Implements hook_views_pre_view().
  */
-
 function stanford_related_courses_views_pre_view(&$view, &$display_id, &$args) {
 
   // Insert the related content field after the course year field.
