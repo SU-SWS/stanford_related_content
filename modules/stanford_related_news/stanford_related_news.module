@@ -175,12 +175,11 @@ function stanford_related_news_alter_3_item_block(&$views) {
 }
 
 /**
- * Add related content to the page display or upcoming_news_page_list
+ * Add related content to the page display or upcoming_news_page_list.
  *
  * @param array $views
  *   Array of views.
  */
-
 function stanford_related_news_alter_page(&$views) {
 
   // Add related content to the exposed filter.
