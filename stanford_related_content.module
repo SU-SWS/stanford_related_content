@@ -42,7 +42,7 @@ function stanford_related_content_add_more_link($subject, $link_text = "See more
       'query' => array($args),
     );
 
-    $a = l(t($link_text), $url, $options);
+    $a = l($link_text, $url, $options);
 
     // Replace text with the URL.
     $subject = preg_replace($pattern, $a, $subject);
@@ -703,4 +703,3 @@ function stanford_related_content_create_block(&$views,
     return FALSE;
   }
 }
-
