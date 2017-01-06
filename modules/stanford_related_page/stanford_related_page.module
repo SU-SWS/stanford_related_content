@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Stanford Related Page feature.
@@ -16,10 +17,8 @@ function stanford_related_page_views_default_views_alter(&$views) {
 /**
  * Add exposed filter for related content to the page display.
  *
- * @param object $views
+ * @param array $views
  *   Array of views.
- * @param string $name
- *    View to be altered.
  */
 function stanford_related_page_alter_manage_page(&$views) {
   $view_name = 'stanford_page_manage';
@@ -51,7 +50,7 @@ function stanford_related_page_alter_manage_page(&$views) {
 }
 
 /**
- * Implementation of hook_views_pre_view().
+ * Implements hook_views_pre_view().
  */
 function stanford_related_page_views_pre_view(&$view, &$display_id, &$args) {
 

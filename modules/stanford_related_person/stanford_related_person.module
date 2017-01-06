@@ -1,7 +1,10 @@
 <?php
+
 /**
  * @file
+ * Code for the Stanford Related Person feature.
  */
+
 /**
  * Implements hook_views_default_views_alter().
  */
@@ -12,10 +15,11 @@ function stanford_related_person_views_default_views_alter(&$views) {
   //stanford_related_person_alter_page($views);
   stanford_related_person_alter_manage_person($views);
 }
+
 /**
  * Add exposed filter for related content to the page display.
  *
- * @param object $views
+ * @param array $views
  *   Array of views.
  */
 function stanford_related_person_alter_manage_person(&$views) {
@@ -48,9 +52,8 @@ function stanford_related_person_alter_manage_person(&$views) {
 }
 
 /**
- * Implementation of hook_views_pre_view().
+ * Implements hook_views_pre_view().
  */
-
 function stanford_related_person_views_pre_view(&$view, &$display_id, &$args) {
 
   // Insert the related content field after the location field
@@ -62,7 +65,7 @@ function stanford_related_person_views_pre_view(&$view, &$display_id, &$args) {
 /**
  * Copy the block display in the stanford_news_view and add contextual filter.
  *
- * @param object $views
+ * @param array $views
  *   Array of views.
  */
 function stanford_related_person_alter_four_grid_block(&$views) {
@@ -74,27 +77,28 @@ function stanford_related_person_alter_four_grid_block(&$views) {
   else {
     if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_person', "View '%name' not available.",
-      array('%name' => $view_name), WATCHDOG_DEBUG);
+        array('%name' => $view_name), WATCHDOG_DEBUG);
     }
     return FALSE;
   }
 
   /* Todo: Do we want to link to the people page?
-  // Get the page URL
-  $page_handler = null;
+  // Get the page URL.
+  $page_handler = NULL;
   if (isset($view->display['page_1'])) {
     if ($view->set_display('page_1')) {
       $page_handler = $view->display_handler;
     }
   }
+
   // Is it overridden?
-  elseif (isset($view->display['recent_person_page_2'])){
-    if ($view->set_display('recent_person_page_2')){
+  elseif (isset($view->display['recent_person_page_2'])) {
+    if ($view->set_display('recent_person_page_2')) {
       $page_handler = $view->display_handler;
     }
   }
 
-  if ($page_handler == null) {
+  if ($page_handler == NULL) {
     watchdog('stanford_related_person', "Display not available in view %view_name.",
       array('%view_name' => $view_name), WATCHDOG_DEBUG);
     return FALSE;
@@ -103,22 +107,28 @@ function stanford_related_person_alter_four_grid_block(&$views) {
   */
 
   // Copy the block display.
-  $handler = stanford_related_content_copy_display($views, $view_name, $display_name, 'Filtered Block', 'filtered_block');
+  $handler = stanford_related_content_copy_display($views,
+    $view_name, $display_name, 'Filtered Block', 'filtered_block');
   if ($handler == FALSE) {
     return FALSE;
   }
 
   // Add contextual filter and more link.
-  $handler = stanford_related_content_add_contextual_filter($handler, 'Related People');
+  $handler = stanford_related_content_add_contextual_filter($handler,
+    'Related People');
   /* TODO: If we link to a page
-  $handler = stanford_related_content_add_footer_more_link($handler, $page_path);
+  $handler = stanford_related_content_add_footer_more_link($handler,
+    $page_path);
   */
 
   // Check that the view still works after we altered it!
   if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_person')) {
     if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_person', "Block %display_name added to view %view_name.",
-      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+        array(
+          '%display_name' => $display_name,
+          '%view_name' => $view_name
+        ), WATCHDOG_DEBUG);
     }
     return TRUE;
   }
@@ -128,7 +138,7 @@ function stanford_related_person_alter_four_grid_block(&$views) {
 /**
  * Copy the block display in the stanford_grid_five_block.
  *
- * @param object $views
+ * @param array $views
  *   Array of views.
  */
 function stanford_related_person_alter_five_grid_block(&$views) {

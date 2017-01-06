@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @file
+ * Code for the Stanford Related News feature.
  */
 
 /**
@@ -68,7 +70,7 @@ function stanford_related_news_alter_manage_news(&$views) {
 }
 
 /**
- * Implementation of hook_views_pre_view().
+ * Implements hook_views_pre_view().
  */
 function stanford_related_news_views_pre_view(&$view, &$display_id, &$args) {
 
@@ -86,8 +88,8 @@ function stanford_related_news_views_pre_view(&$view, &$display_id, &$args) {
  *   with a link to the related view page.
  */
 function stanford_related_news_views_pre_build(&$view) {
-  if ($view->name == "stanford_news"){
-    if ($view->current_display == "filtered_3_news_block")  {
+  if ($view->name == "stanford_news") {
+    if ($view->current_display == "filtered_3_news_block") {
       $subject = $view->footer["area"]->options["content"];
       $view->footer["area"]->options["content"]
         = stanford_related_content_add_more_link($subject, "See more related news");
@@ -109,7 +111,6 @@ function stanford_related_news_views_pre_build(&$view) {
   }
 }
 
-
 /**
  * Copy the block display in the stanford_news_view and add contextual filter.
  *
@@ -129,21 +130,21 @@ function stanford_related_news_alter_3_item_block(&$views) {
     return FALSE;
   }
 
-  // Get the page URL
-  $page_handler = null;
+  // Get the page URL.
+  $page_handler = NULL;
   if (isset($view->display['page_1'])) {
     if ($view->set_display('page_1')) {
       $page_handler = $view->display_handler;
     }
   }
   // Is it overridden?
-  elseif (isset($view->display['recent_news_page_2'])){
-    if ($view->set_display('recent_news_page_2')){
+  elseif (isset($view->display['recent_news_page_2'])) {
+    if ($view->set_display('recent_news_page_2')) {
       $page_handler = $view->display_handler;
     }
   }
 
-  if ($page_handler == null) {
+  if ($page_handler == NULL) {
     if (variable_get("stanford_related_debug_mode", FALSE)) {
       watchdog('stanford_related_news', "Display not available in view %view_name.",
       array('%view_name' => $view_name), WATCHDOG_DEBUG);
@@ -158,7 +159,7 @@ function stanford_related_news_alter_3_item_block(&$views) {
     return FALSE;
   }
 
-  // Add contextual filter and more link
+  // Add contextual filter and more link.
   $handler = stanford_related_content_add_contextual_filter($handler, 'Related News');
   $handler = stanford_related_content_add_footer_more_link($handler, $page_path);
 
@@ -173,16 +174,16 @@ function stanford_related_news_alter_3_item_block(&$views) {
   return FALSE;
 }
 
-/* *
+/**
  * Add related content to the page display or upcoming_news_page_list
  *
- * @param object $views
+ * @param array $views
  *   Array of views.
  */
 
 function stanford_related_news_alter_page(&$views) {
 
-  // Add related content to the exposed filter
+  // Add related content to the exposed filter.
   $page_result = stanford_related_content_add_exposed_filter($views, 'stanford_news', 'page_1', TRUE);
   $soe_page_result = stanford_related_content_add_exposed_filter($views, 'stanford_news', 'recent_news_page_2', TRUE);
 
