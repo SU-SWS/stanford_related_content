@@ -3,7 +3,6 @@
 /**
  * @file
  * Common functions (utilities) for related content.
- *
  */
 
 /**
@@ -43,7 +42,7 @@ function stanford_related_content_add_more_link($subject, $link_text = "See more
       'query' => array($args),
     );
 
-    $a = l(t($link_text), $url, $options);
+    $a = l($link_text, $url, $options);
 
     // Replace text with the URL.
     $subject = preg_replace($pattern, $a, $subject);
@@ -226,17 +225,18 @@ function stanford_related_content_add_vbo($views, $view_name, $display_name = 'p
 
   // Add VBO option.
   // VBO 7.x-3.2.
-  if (isset($options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
-    ['settings'])) {
+  if (isset($options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']['settings'])) {
     $options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
-    ['settings']['display_values']['stanford_event::field_s_related_content'] = 'stanford_event::field_s_related_content';
+    ['settings']['display_values']['stanford_event::field_s_related_content']
+      = 'stanford_event::field_s_related_content';
   }
 
   // VBO 7.x-3.0-rc1.
   elseif (is_array($options['views_bulk_operations']['vbo']['operations']['action::views_bulk_operations_modify_action']
   ['settings']['display_values'])) {
     $options['views_bulk_operations']['vbo']['operations']['action::views_bulk_operations_modify_action']
-    ['settings']['display_values']['stanford_event::field_s_related_content'] = 'stanford_event::field_s_related_content';
+    ['settings']['display_values']['stanford_event::field_s_related_content']
+      = 'stanford_event::field_s_related_content';
   }
   else {
     $options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action'] =
@@ -426,8 +426,12 @@ function stanford_related_content_add_footer_more_link($display_handler, $url) {
  *   View to be altered.
  * @param string $display_id
  *   Display to be altered.
+ * @param string $after_field
+ *   Field after which the related content should be added.
  */
-function stanford_related_content_insert_related_content(&$view, &$display_id, $after_field) {
+function stanford_related_content_insert_related_content(&$view,
+                                                         &$display_id,
+                                                         $after_field) {
 
   $options['field_s_related_content']['id'] = 'field';
   $options['field_s_related_content']['table'] = 'field_data_field_s_related_content';
@@ -460,8 +464,13 @@ function stanford_related_content_insert_related_content(&$view, &$display_id, $
  * @return bool
  *   Indicates success or failure.
  */
-function stanford_related_content_insert_item($view, $display_id, $type, $table, $field, $options = array(),
-                                                $after_field = NULL) {
+function stanford_related_content_insert_item($view,
+                                              $display_id,
+                                              $type,
+                                              $table,
+                                              $field,
+                                              $options = array(),
+                                              $after_field = NULL) {
 
   if (!$view->set_display($display_id)) {
     if (variable_get("stanford_related_debug_mode", FALSE)) {
@@ -698,4 +707,3 @@ function stanford_related_content_create_block(&$views,
     return FALSE;
   }
 }
-

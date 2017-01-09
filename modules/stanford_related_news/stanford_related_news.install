@@ -47,7 +47,6 @@ function stanford_related_news_install() {
   }
 }
 
-
 /**
  * Implements hook_uninstall().
  */
